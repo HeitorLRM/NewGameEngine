@@ -1,0 +1,78 @@
+// TODO ownership: Heitor
+
+#include "Sprite.hpp"
+#include "GameObject.hpp"
+#include "Rect.hpp"
+#include "State.hpp"
+#include "Vec2.hpp"
+#include "UserInterface.hpp"
+#include <memory>
+#include <vector>
+
+using namespace engine;
+using std::shared_ptr;
+using std::string;
+using std::vector;
+
+
+Vec2 Texture::getDimensions() {
+	return dimensions;
+}
+
+
+
+void Sprite::render() {
+	if (texture) texture->render(
+		getClip(), 
+		Rect(getGlobalPosition(), getClip().getDimensions())
+	);
+
+	GameObject::render();
+}
+
+void Sprite::setTexture(shared_ptr<Texture> texture) {
+	this->texture = texture;
+	
+	if (texture)
+		clip = Rect(Vec2(), texture->getDimensions());
+}
+
+shared_ptr<Texture> Sprite::getTexture() {
+	return texture;
+}
+
+void Sprite::setClip(const Rect& clip) {
+	this->clip = clip;
+}
+
+Rect Sprite::getClip() {
+	return clip;
+}
+
+
+
+void SpriteSheet::setSheet(const std::vector<Rect>& frames) {
+	this->frames = frames;
+}
+
+unsigned SpriteSheet::addFrame(const Rect& frame) {
+	frames.push_back(frame);
+	return frames.size();
+}
+
+Rect& SpriteSheet::getFrame(unsigned index) {
+	return frames[index];
+}
+
+void SpriteSheet::setCurrentFrame(unsigned index) {
+	this->current_frame = index;
+}
+
+unsigned SpriteSheet::getCurrentFrame() {
+	return current_frame;
+}
+
+Rect SpriteSheet::getClip() {
+	return getFrame(getCurrentFrame());
+}
+
