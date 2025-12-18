@@ -9,7 +9,8 @@ using namespace engine;
 using std::weak_ptr;
 
 Game::Game() :
-	quit_requested(false)
+	quit_requested(false),
+	interface(nullptr)
 {
 }
 
