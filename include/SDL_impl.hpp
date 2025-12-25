@@ -2,6 +2,8 @@
 
 #pragma once
 
+#define IMPLEMENTATION_SDL2
+
 #include "Sprite.hpp"
 #include "UserInterface.hpp"
 #include "Vec2.hpp"

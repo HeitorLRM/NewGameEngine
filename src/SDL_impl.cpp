@@ -1,6 +1,9 @@
 // TODO ownership: Heitor
 
 #include "SDL_impl.hpp"
+
+#ifdef IMPLEMENTATION_SDL2
+
 #include "SDL_render.h"
 #include "Sprite.hpp"
 #include "UserInterface.hpp"
@@ -239,3 +242,4 @@ void SDLInterface::closeRenderer() {
 	SDL_DestroyRenderer(renderer);
 }
 
+#endif//IMPLEMENTATION_SDL2
