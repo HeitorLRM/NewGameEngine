@@ -11,6 +11,7 @@
 class SDL_Window;
 class SDL_Renderer;
 class SDL_Texture;
+class MIX_Mixer;
 namespace engine {
 
 class SDLInterface;
@@ -74,13 +75,12 @@ private:
 	);
 	void closeWindow();
 
-	void initRenderer();
-	void closeRenderer();
-
 private:
 	bool open;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+	MIX_Mixer* mixer;
+
 
 };
 

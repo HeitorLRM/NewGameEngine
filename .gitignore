@@ -1,0 +1,6 @@
+bin/
+.cache/
+.vscode/
+compile_commands.json
+GameEngine.make
+Makefile
