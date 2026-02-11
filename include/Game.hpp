@@ -7,7 +7,7 @@
 namespace engine {
 
 class State;
-class UserInterface;
+class AppIO;
 
 class Game {
 public:
@@ -17,11 +17,11 @@ public:
 	void requestQuit();
 	
 	std::weak_ptr<State> getState();
-	UserInterface* getInterface();
+	std::weak_ptr<AppIO> getInterface();
 
 protected:
 	void setState(std::shared_ptr<State>);
-	void setInterface(UserInterface*);
+	void setInterface(std::shared_ptr<AppIO>);
 
 	virtual void init() = 0;
 	virtual void close() = 0;
@@ -32,7 +32,7 @@ protected:
 private:
 	bool quit_requested;
 	std::shared_ptr<State> state;
-	UserInterface* interface;
+	std::shared_ptr<AppIO> interface;
 };
 
 }

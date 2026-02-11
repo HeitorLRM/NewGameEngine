@@ -2,10 +2,11 @@
 
 #include "Game.hpp"
 #include "State.hpp"
-#include "UserInterface.hpp"
+#include "AppIO.hpp"
 #include <memory>
 
 using namespace engine;
+using std::shared_ptr;
 using std::weak_ptr;
 
 Game::Game() :
@@ -21,7 +22,7 @@ void Game::requestQuit() {
 bool Game::shouldQuit() {
 	return
 		// Check if interface has requested to stop the game
-		(getInterface() && getInterface()->shouldClose()) ||
+		(getInterface().lock() && getInterface().lock()->shouldClose()) ||
 
 		// Check if game logic requested
 		quit_requested
@@ -32,15 +33,15 @@ weak_ptr<State> Game::getState() {
 	return state;
 }
 
-UserInterface* Game::getInterface() {
+weak_ptr<AppIO> Game::getInterface() {
 	return interface;
 }
 
-void Game::setState(std::shared_ptr<State> state) {
+void Game::setState(shared_ptr<State> state) {
 	this->state = state;
 }
 
-void Game::setInterface(UserInterface* interface) {
+void Game::setInterface(shared_ptr<AppIO> interface) {
 	this->interface = interface;
 }
 

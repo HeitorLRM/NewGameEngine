@@ -3,8 +3,9 @@
 #pragma once
 
 #include "Sprite.hpp"
-#include "UserInterface.hpp"
+#include "AppIO.hpp"
 #include "Vec2.hpp"
+
 #include <memory>
 #include <string>
 
@@ -29,54 +30,34 @@ private:
 	SDL_Texture* texture;
 }; // SDL wrapper
 
-class SDLInterface final : public UserInterface {
-public:
-	// Singleton
-	static SDLInterface* getInstance();
-
+class SDLInterface final : public AppIO {
+// Static
 private:
-	SDLInterface();
-	SDLInterface(const SDLInterface&) = default;
-	SDLInterface& operator=(SDLInterface const&);
+	static void initSDL();
+	static void closeSDL();
+	static unsigned instances;
 
-public:
+// Instance
+public:	
+	SDLInterface(
+		const std::string& windowTitle,
+		const Vec2& windowDimensions
+	);
 	~SDLInterface();
 
-	void render();
+	bool shouldClose() override;
+	void render() override;
+	SDL_Window* getWindow();
+	SDL_Renderer* getRenderer();
+	std::shared_ptr<Texture> loadTextureFromFile(const std::string& file) override;
+
+private:
 	void init(
 		const std::string& windowTitle,
 		const Vec2& windowDimensions
 	);
 	void close();
 
-	std::shared_ptr<Texture> loadTextureFromFile(const std::string& file);
-
-	bool shouldClose();
-	bool isOpen();
-	SDL_Window* getWindow();
-	SDL_Renderer* getRenderer();
-
-private:
-	void initSDL();
-	void closeSDL();
-
-	void initSDLImg();
-	void closeSDLImg();
-
-	void initSDLMix();
-	void closeSDLMix();
-
-	void initSDLFont();
-	void closeSDLFont();
-
-	void initWindow(
-		const std::string& windowTitle,
-		const Vec2& windowDimensions
-	);
-	void closeWindow();
-
-private:
-	bool open;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	MIX_Mixer* mixer;
