@@ -1,7 +1,7 @@
 // TODO ownership: Heitor
 
 #include "GameObject.hpp"
-#include "State.hpp"
+#include "Stage.hpp"
 #include <memory>
 #include <vector>
 
@@ -11,20 +11,20 @@ using std::shared_ptr;
 using std::vector;
 
 GameObject::GameObject() :
-	state(nullptr),
+	stage(nullptr),
 	parent(nullptr)
 {
 }
 
-void GameObject::setState(State* state) {
-	this->state = state;
+void GameObject::setStage(Stage* stage) {
+	this->stage = stage;
 
 	for (auto& child : children)
-		child->setState(state);
+		child->setStage(stage);
 }
 
-State* GameObject::getState() {
-	return state;
+Stage* GameObject::getStage() {
+	return stage;
 }
 
 void GameObject::setParent(GameObject* parent) {
@@ -38,7 +38,7 @@ void GameObject::setParent(GameObject* parent) {
 	this->parent = parent;
 
 	if (parent)
-		setState(parent->getState());
+		setStage(parent->getStage());
 }
 
 GameObject* GameObject::getParent() {

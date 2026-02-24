@@ -1,7 +1,7 @@
 // TDOO ownership: Heitor
 
 #include "Game.hpp"
-#include "State.hpp"
+#include "Stage.hpp"
 #include "AppIO.hpp"
 #include <memory>
 
@@ -29,16 +29,16 @@ bool Game::shouldQuit() {
 	;
 }
 
-weak_ptr<State> Game::getState() {
-	return state;
+weak_ptr<Stage> Game::getStage() {
+	return stage;
 }
 
 weak_ptr<AppIO> Game::getInterface() {
 	return interface;
 }
 
-void Game::setState(shared_ptr<State> state) {
-	this->state = state;
+void Game::setStage(shared_ptr<Stage> stage) {
+	this->stage = stage;
 }
 
 void Game::setInterface(shared_ptr<AppIO> interface) {
@@ -56,9 +56,9 @@ void Game::run() {
 }
 
 void Game::mainLoop() {
-	if (state) {
-		state->update(1.0/30.0);
-		state->render();
+	if (stage) {
+		stage->update(1.0/30.0);
+		stage->render();
 	}
 
 	if (interface)

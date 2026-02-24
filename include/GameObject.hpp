@@ -6,7 +6,7 @@
 #include <vector>
 namespace engine {
 
-class State;
+class Stage;
 
 class GameObject {
 public:
@@ -17,8 +17,8 @@ public:
 	virtual void update(float delta_time);
 	virtual void render();
 
-	State* getState();
-	void setState(State*);
+	Stage* getStage();
+	void setStage(Stage*);
 
 	GameObject* getParent();
 	void setParent(GameObject*);
@@ -31,7 +31,7 @@ public:
 private:
 	std::vector<std::shared_ptr<GameObject>> children;
 
-	State* state;
+	Stage* stage;
 	GameObject* parent;
 };
 

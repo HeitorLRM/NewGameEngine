@@ -1,6 +1,6 @@
 // TODO ownership: Heitor
 
-#include "State.hpp"
+#include "Stage.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include <memory>
@@ -8,31 +8,31 @@
 using namespace engine;
 using std::shared_ptr;
 
-State::State(Game* game) :
+Stage::Stage(Game* game) :
 	game(game)
 {
 
 }
 
-void State::update(float delta_time) {
+void Stage::update(float delta_time) {
 	root->update(delta_time);
 }
 
-void State::render() {
+void Stage::render() {
 	root->render();
 }
 
-Game* State::getGame() {
+Game* Stage::getGame() {
 	return game;
 }
 
-GameObject* State::getRoot() {
+GameObject* Stage::getRoot() {
 	return root.get();
 }
 
-void State::setRoot(shared_ptr<GameObject> root) {
+void Stage::setRoot(shared_ptr<GameObject> root) {
 	this->root = root;
 
-	getRoot()->setState(this);
+	getRoot()->setStage(this);
 }
 

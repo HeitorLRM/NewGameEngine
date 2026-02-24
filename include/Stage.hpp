@@ -7,9 +7,9 @@ namespace engine {
 class Game;
 class GameObject;
 
-class State {
+class Stage {
 public:
-	State(Game* game);
+	Stage(Game* game);
 
 	virtual void update(float delta_time) = 0;
 	virtual void render() = 0;

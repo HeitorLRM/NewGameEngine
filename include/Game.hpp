@@ -6,7 +6,7 @@
 
 namespace engine {
 
-class State;
+class Stage;
 class AppIO;
 
 class Game {
@@ -16,11 +16,11 @@ public:
 	void run();
 	void requestQuit();
 	
-	std::weak_ptr<State> getState();
+	std::weak_ptr<Stage> getStage();
 	std::weak_ptr<AppIO> getInterface();
 
 protected:
-	void setState(std::shared_ptr<State>);
+	void setStage(std::shared_ptr<Stage>);
 	void setInterface(std::shared_ptr<AppIO>);
 
 	virtual void init() = 0;
@@ -31,7 +31,7 @@ protected:
 
 private:
 	bool quit_requested;
-	std::shared_ptr<State> state;
+	std::shared_ptr<Stage> stage;
 	std::shared_ptr<AppIO> interface;
 };
 

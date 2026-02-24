@@ -3,7 +3,7 @@
 #include "Sprite.hpp"
 #include "GameObject.hpp"
 #include "Rect.hpp"
-#include "State.hpp"
+#include "Stage.hpp"
 #include "Vec2.hpp"
 #include "AppIO.hpp"
 #include <memory>
