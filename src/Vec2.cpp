@@ -1,7 +1,7 @@
 // TODO ownership: Heitor
 
 #include "Vec2.hpp"
-#include <cmath>
+#include "Math.hpp"
 #include <ostream>
 
 using namespace engine;
@@ -21,11 +21,6 @@ Vec2::Vec2(float x, float y) :
 Vec2::Vec2() :
 	Vec2(Vec2::ZERO)
 {
-}
-
-// Comparison with a margin of error (EPS). Local to this file.
-static bool eps_equal(const float& f0, const float& f1) {
-	return std::abs( f0 - f1 ) <= EPS;
 }
 
 bool Vec2::operator==(const Vec2& v) const {

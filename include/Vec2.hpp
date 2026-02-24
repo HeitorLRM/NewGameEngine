@@ -5,9 +5,6 @@
 #include <ostream>
 namespace engine {
 
-constexpr float PI = 3.14159265359;
-constexpr float EPS = 1e-9;
-
 class Vec2 {
 public:
 	Vec2();
