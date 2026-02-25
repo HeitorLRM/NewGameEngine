@@ -22,6 +22,12 @@ void Stage::render() {
 	root->render();
 }
 
+void Stage::load() {
+}
+
+void Stage::unload() {
+}
+
 Game* Stage::getGame() {
 	return game;
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include <memory>
+#include <set>
 
 namespace engine {
 
@@ -16,11 +17,11 @@ public:
 	void run();
 	void requestQuit();
 	
-	std::weak_ptr<Stage> getStage();
 	std::weak_ptr<AppIO> getInterface();
 
 protected:
-	void setStage(std::shared_ptr<Stage>);
+	void loadStage(std::shared_ptr<Stage>);
+	void unloadStage(std::shared_ptr<Stage>);
 	void setInterface(std::shared_ptr<AppIO>);
 
 	virtual void init() = 0;
@@ -29,9 +30,11 @@ protected:
 	virtual void mainLoop();
 	virtual bool shouldQuit();
 
+	const std::set<std::shared_ptr<Stage>>& getLoadedStages();
+
 private:
 	bool quit_requested;
-	std::shared_ptr<Stage> stage;
+	std::set<std::shared_ptr<Stage>> loaded_stages;
 	std::shared_ptr<AppIO> interface;
 };
 

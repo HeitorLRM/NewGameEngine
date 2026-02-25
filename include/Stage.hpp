@@ -11,8 +11,10 @@ class Stage {
 public:
 	Stage(Game* game);
 
-	virtual void update(float delta_time) = 0;
-	virtual void render() = 0;
+	virtual void update(float delta_time);
+	virtual void render();
+	virtual void load();
+	virtual void unload();
 
 	Game* getGame();
 
@@ -24,8 +26,6 @@ protected:
 
 	std::shared_ptr<GameObject> root;
 
-	virtual void loadAssets() = 0;
-	
 };
 
 }
