@@ -25,28 +25,12 @@ using std::runtime_error;
 TextureSDL::TextureSDL(SDLInterface* target) :
 	Texture(),
 	target(target),
-	texture(nullptr)
+	sdl_texture(nullptr)
 {
 }
 
 TextureSDL::~TextureSDL() {
-	SDL_DestroyTexture(texture);
-}
-
-bool TextureSDL::loadFromFile(const string& file) {
-	if (!target) return false; // TODO error codes
-
-	texture = IMG_LoadTexture(
-		target->getRenderer(),
-		file.c_str()
-	);
-	if (texture == nullptr) return false;
-
-	float dim_x, dim_y;
-	SDL_GetTextureSize(texture, &dim_x, &dim_y);
-	dimensions = Vec2(dim_x, dim_y);
-
-	return true;
+	SDL_DestroyTexture(sdl_texture);
 }
 
 void TextureSDL::render(const Rect& clip, const Rect& dst) {
@@ -65,7 +49,7 @@ void TextureSDL::render(const Rect& clip, const Rect& dst) {
 
 	bool success = SDL_RenderTexture(
 		target->getRenderer(), 
-		texture, 
+		sdl_texture, 
 		&clipRect, 
 		&dstRect
 	);
@@ -155,8 +139,21 @@ SDL_Renderer* SDLInterface::getRenderer() {
 }
 
 shared_ptr<Texture> SDLInterface::loadTextureFromFile(const std::string& file) {
-	Texture* texture = new TextureSDL(this);
-	texture->loadFromFile(file);
+	TextureSDL* texture = new TextureSDL(this);
+
+	texture->sdl_texture = IMG_LoadTexture(
+		getRenderer(),
+		file.c_str()
+	);
+
+	if (texture->sdl_texture != nullptr)
+		SDL_GetTextureSize(
+			texture->sdl_texture, 
+			&texture->dimensions.x, 
+			&texture->dimensions.y
+		);
+	
+
 	return shared_ptr<Texture>(texture);
 }
 

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "AppIO.hpp"
 #include "Object2D.hpp"
 #include "Rect.hpp"
 #include "Vec2.hpp"
@@ -13,8 +14,9 @@ namespace engine {
 class Texture {
 public:
 	// Abstract
-	virtual bool loadFromFile(const std::string&) = 0;
 	virtual void render(const Rect& clip, const Rect& dst) = 0; // TODO Reci
+
+	static std::shared_ptr<Texture> loadFromFile(const std::string& filepath, std::weak_ptr<AppIO> interface);
 
 	Vec2 getDimensions();
 

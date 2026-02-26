@@ -22,12 +22,13 @@ public:
 	TextureSDL(SDLInterface* target);
 	~TextureSDL();
 
-	bool loadFromFile(const std::string&) override;
 	void render(const Rect& clip, const Rect& dst) override;
 
 private:
 	SDLInterface* target;
-	SDL_Texture* texture;
+	SDL_Texture* sdl_texture;
+	
+friend SDLInterface;
 }; // SDL wrapper
 
 class SDLInterface final : public AppIO {
