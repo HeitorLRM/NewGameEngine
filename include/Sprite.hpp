@@ -28,6 +28,14 @@ protected:
 
 class Sprite : public Object2D {
 public:
+	enum Anchoring {
+		CENTER,
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT
+	};
+
 	void render() override;
 	
 	void setTexture(std::shared_ptr<Texture> texture);
@@ -35,6 +43,8 @@ public:
 
 	void setClip(const Rect& clip);
 	virtual Rect getClip();
+
+	Anchoring anchor = CENTER;
 
 protected:
 	Rect clip;

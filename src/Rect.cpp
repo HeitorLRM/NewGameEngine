@@ -7,10 +7,8 @@
 using namespace engine;
 
 Rect::Rect() :
-	x(0),
-	y(0),
-	w(0),
-	h(0)
+	origin(Vec2::ZERO),
+	dimensions(Vec2::ZERO)
 {
 }
 
@@ -18,10 +16,8 @@ Rect::Rect(
 	const Vec2& origin, 
 	const Vec2& dimensions
 ) :
-	x(origin.x),
-	y(origin.y),
-	w(dimensions.x),
-	h(dimensions.y)
+	origin(origin),
+	dimensions(dimensions)
 {
 }
 
@@ -31,21 +27,19 @@ Rect::Rect(
 	float w,
 	float h
 ) :
-	x(x),
-	y(y),
-	w(w),
-	h(h)
+	origin(x, y),
+	dimensions(w, h)
 {
 }
 
 float Rect::area() const {
-	return w * h;
+	return w() * h();
 }
 
 bool Rect::contains(const Vec2& point) const {
 	return
-		x <= point.x && point.x < x+w &&
-		y <= point.y && point.y < y+h
+		x() <= point.x && point.x < x()+w() &&
+		y() <= point.y && point.y < y()+h()
 	;
 }
 
@@ -62,13 +56,13 @@ Rect Rect::intersection(const Rect& r) const {
 	using std::max;
 
 	Vec2 start(
-		max(x, r.x),
-		max(y, r.y)
+		max(x(), r.x()),
+		max(y(), r.y())
 	);
 
 	Vec2 end(
-		min(x+w, r.x + r.w),
-		min(y+h, r.y + r.h)
+		min(x()+w(), r.x() + r.w()),
+		min(y()+h(), r.y() + r.h())
 	);
 
 	if (start.x > end.x || start.y > end.y)
@@ -80,39 +74,20 @@ Rect Rect::intersection(const Rect& r) const {
 	);
 }
 
-
-Vec2 Rect::getOrigin() const {
-	return Vec2(x,y);
-}
-
-Vec2 Rect::getDimensions() const {
-	return Vec2(w,h);
-}
-
 Vec2 Rect::getCenter() const {
-	return getOrigin() + getDimensions()/2;
+	return origin + dimensions/2;
 }
 
 Vec2 Rect::getEnd() const {
-	return getOrigin() + getDimensions();
-}
-
-void Rect::setOrigin(const Vec2& origin) {
-	x = origin.x;
-	y = origin.y;
-}
-
-void Rect::setDimensions(const Vec2& dimensions) {
-	w = dimensions.x;
-	h = dimensions.y;
+	return origin + dimensions;
 }
 
 void Rect::setCenter(const Vec2& center) {
-	setOrigin(center - getDimensions()/2);
+	origin = center - dimensions/2;
 }
 
 void Rect::setEnd(const Vec2& end) {
-	setDimensions(end - getOrigin());
+	dimensions = end - origin;
 }
 
 

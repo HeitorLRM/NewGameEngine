@@ -1,9 +1,7 @@
 // TODO ownership: Heitor
 
 #include "Sprite.hpp"
-#include "GameObject.hpp"
 #include "Rect.hpp"
-#include "Stage.hpp"
 #include "Vec2.hpp"
 #include "AppIO.hpp"
 #include <memory>
@@ -29,12 +27,33 @@ shared_ptr<Texture> Texture::loadFromFile(const string& filename, weak_ptr<AppIO
 
 // Sprite ----------------------------------------
 void Sprite::render() {
-	if (texture) texture->render(
-		getClip(), 
-		Rect(getGlobalPosition(), getClip().getDimensions())
-	);
+	// call super
+	Object2D::render();
 
-	GameObject::render();
+	if (!texture) return;
+	
+	Rect dst(getGlobalPosition(), getClip().dimensions);
+
+	switch (anchor) {
+        case CENTER:
+			dst.origin -= dst.dimensions/2;
+			break;
+        case TOP_LEFT:
+			break;
+        case TOP_RIGHT:
+			dst.origin.x -= dst.dimensions.x;
+			break;
+        case BOTTOM_LEFT:
+			dst.origin.y -= dst.dimensions.y;
+			break;
+        case BOTTOM_RIGHT:
+			dst.origin -= dst.dimensions;
+			break;
+        default: 
+			break;
+        }
+
+        texture->render(getClip(), dst);
 }
 
 void Sprite::setTexture(shared_ptr<Texture> texture) {
