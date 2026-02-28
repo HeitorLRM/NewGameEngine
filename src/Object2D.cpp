@@ -1,6 +1,7 @@
 // TODO ownership: Heitor
 
 #include "Object2D.hpp"
+#include "GameObject.hpp"
 #include "Transform2D.hpp"
 #include <memory>
 
@@ -38,5 +39,10 @@ void Object2D::mark_global_transform_dirty() {
 		if (child2D)
 			child2D->mark_global_transform_dirty();
 	}
+}
+
+void Object2D::setParent(GameObject* parent) {
+	mark_global_transform_dirty();
+	return GameObject::setParent(parent);
 }
 

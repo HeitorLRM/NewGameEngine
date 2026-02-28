@@ -12,6 +12,7 @@ public:
 	Transform2D& getTransform();
 	const Transform2D& getTransform() const;
 	const Transform2D& getGlobalTransform();
+	void setParent(GameObject *) final;
 
 private:
 	void mark_global_transform_dirty();
@@ -19,7 +20,7 @@ private:
 private:
 	Transform2D transform;
 	Transform2D global_transform;
-	bool is_global_transform_dirty = false;
+	bool is_global_transform_dirty = true;
 };
 
 }

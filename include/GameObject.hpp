@@ -21,7 +21,7 @@ public:
 	void setStage(Stage*);
 
 	GameObject* getParent();
-	void setParent(GameObject*);
+	virtual void setParent(GameObject*);
 
 	void addChild(std::shared_ptr<GameObject>);
 	void addChild(std::shared_ptr<GameObject>, unsigned index);
