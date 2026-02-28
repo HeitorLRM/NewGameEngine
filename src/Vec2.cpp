@@ -6,22 +6,11 @@
 
 using namespace engine;
 
-const Vec2 Vec2::ZERO	( 0, 0);
-const Vec2 Vec2::UP		( 0,-1);
-const Vec2 Vec2::DOWN	( 0, 1);
-const Vec2 Vec2::LEFT	(-1, 0);
-const Vec2 Vec2::RIGHT	( 1, 0);
-
-Vec2::Vec2(float x, float y) :
-	x(x),
-	y(y)
-{
-}
-
-Vec2::Vec2() :
-	Vec2(Vec2::ZERO)
-{
-}
+const Vec2 Vec2::ZERO	{ 0, 0};
+const Vec2 Vec2::UP		{ 0,-1};
+const Vec2 Vec2::DOWN	{ 0, 1};
+const Vec2 Vec2::LEFT	{-1, 0};
+const Vec2 Vec2::RIGHT	{ 1, 0};
 
 bool Vec2::operator==(const Vec2& v) const {
 	return
@@ -35,52 +24,52 @@ bool Vec2::operator!=(const Vec2& v) const {
 }
 
 Vec2 Vec2::operator+(const Vec2& v) const {
-	return Vec2(
+	return {
 		x + v.x,
 		y + v.y
-	);
+	};
 }
 
 Vec2 Vec2::operator-(const Vec2& v) const {
-	return Vec2(
+	return {
 		x - v.x,
 		y - v.y
-	);
+	};
 }
 
 Vec2 Vec2::operator-() const {
-	return Vec2(
+	return {
 		-x,
 		-y
-	);
+	};
 }
 
 Vec2 Vec2::operator*(float f) const {
-	return Vec2(
+	return {
 		x * f,
 		y * f
-	);
+	};
 }
 
 Vec2 Vec2::operator*(const Vec2& v) const {
-	return Vec2(
+	return {
 		x * v.x,
 		y * v.y
-	);
+	};
 }
 
 Vec2 Vec2::operator/(float f) const {
-	return Vec2(
+	return {
 		x / f,
 		y / f
-	);
+	};
 }
 
 Vec2 Vec2::operator/(const Vec2& v) const {
-	return Vec2(
+	return {
 		x / v.x,
 		y / v.y
-	);
+	};
 }
 
 Vec2 operator*(float f, const Vec2& v) {
@@ -183,17 +172,17 @@ Vec2 Vec2::normalized() const {
 }
 
 Vec2 Vec2::orthogonal() const {
-	return Vec2(y, -x);
+	return {y, -x};
 }
 
 Vec2 Vec2::rotated(float angle) const {
 	float s = sin(angle);
 	float c = cos(angle);
 
-	return Vec2(
+	return {
 		x*c - y*s,
 		x*s + y*c
-	);
+	};
 }
 
 Vec2 Vec2::reflected(const Vec2& normal) const {

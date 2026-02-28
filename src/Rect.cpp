@@ -6,40 +6,14 @@
 
 using namespace engine;
 
-Rect::Rect() :
-	origin(Vec2::ZERO),
-	dimensions(Vec2::ZERO)
-{
-}
-
-Rect::Rect(
-	const Vec2& origin, 
-	const Vec2& dimensions
-) :
-	origin(origin),
-	dimensions(dimensions)
-{
-}
-
-Rect::Rect(
-	float x,
-	float y,
-	float w,
-	float h
-) :
-	origin(x, y),
-	dimensions(w, h)
-{
-}
-
 float Rect::area() const {
-	return w() * h();
+	return w * h;
 }
 
 bool Rect::contains(const Vec2& point) const {
 	return
-		x() <= point.x && point.x < x()+w() &&
-		y() <= point.y && point.y < y()+h()
+		x <= point.x && point.x < x+w &&
+		y <= point.y && point.y < y+h
 	;
 }
 
@@ -55,23 +29,23 @@ Rect Rect::intersection(const Rect& r) const {
 	using std::min;
 	using std::max;
 
-	Vec2 start(
-		max(x(), r.x()),
-		max(y(), r.y())
-	);
+	Vec2 start{
+		max(x, r.x),
+		max(y, r.y)
+	};
 
-	Vec2 end(
-		min(x()+w(), r.x() + r.w()),
-		min(y()+h(), r.y() + r.h())
-	);
+	Vec2 end{
+		min(x+w, r.x + r.w),
+		min(y+h, r.y + r.h)
+	};
 
 	if (start.x > end.x || start.y > end.y)
 		return Rect();
 
-	return Rect(
+	return Rect{
 		start,
 		end - start
-	);
+	};
 }
 
 Vec2 Rect::getCenter() const {

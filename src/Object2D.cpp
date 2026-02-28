@@ -1,27 +1,42 @@
 // TODO ownership: Heitor
 
 #include "Object2D.hpp"
-#include "Vec2.hpp"
+#include "Transform2D.hpp"
+#include <memory>
 
 using namespace engine;
 
-void Object2D::setLocalPosition(const Vec2& position) {
-	this->local_position = position;
+Transform2D& Object2D::getTransform() {
+	mark_global_transform_dirty();
+	return transform;
 }
 
-Vec2& Object2D::getLocalPosition() {
-	return local_position;
+const Transform2D& Object2D::getTransform() const{
+	return transform;
 }
 
-Vec2 Object2D::getGlobalPosition() {
-	return getParentGlobalPosition() + local_position;
-}
+const Transform2D& Object2D::getGlobalTransform() {
+	if (!is_global_transform_dirty)
+		return global_transform;
 
-Vec2 Object2D::getParentGlobalPosition() {
+	
 	Object2D* parent2D = dynamic_cast<Object2D*>(getParent());
-
 	if (!parent2D)
-		return Vec2::ZERO;
+		return transform;
 
-	return parent2D->getGlobalPosition();
+	global_transform = parent2D->getGlobalTransform()*transform;
+
+	is_global_transform_dirty = false;
+	return global_transform;
 }
+
+void Object2D::mark_global_transform_dirty() {
+	is_global_transform_dirty = true;
+	
+	for (auto& child : getChildren()) {
+		Object2D* child2D = dynamic_cast<Object2D*>(child.get());
+		if (child2D)
+			child2D->mark_global_transform_dirty();
+	}
+}
+

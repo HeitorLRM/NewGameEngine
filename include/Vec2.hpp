@@ -7,9 +7,6 @@ namespace engine {
 
 class Vec2 {
 public:
-	Vec2();
-	Vec2(float x, float y);
-
 	static const Vec2 ZERO;
 	static const Vec2 UP;
 	static const Vec2 DOWN;

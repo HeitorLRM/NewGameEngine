@@ -35,16 +35,16 @@ TextureSDL::~TextureSDL() {
 
 void TextureSDL::render(const Rect& clip, const Rect& dst) {
 	SDL_FRect dstRect = SDL_FRect{
-		dst.x(), 
-		dst.y(), 
-		dst.w(), 
-		dst.h() 
+		dst.x, 
+		dst.y, 
+		dst.w, 
+		dst.h 
 	};
 	SDL_FRect clipRect = SDL_FRect{
-		clip.x(), 
-		clip.y(), 
-		clip.w(), 
-		clip.h() 
+		clip.x, 
+		clip.y, 
+		clip.w, 
+		clip.h 
 	};
 
 	bool success = SDL_RenderTexture(

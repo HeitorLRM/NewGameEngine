@@ -32,7 +32,7 @@ void Sprite::render() {
 
 	if (!texture) return;
 	
-	Rect dst(getGlobalPosition(), getClip().dimensions);
+	Rect dst{getGlobalTransform().position, getClip().dimensions};
 
 	switch (anchor) {
         case CENTER:
@@ -60,7 +60,7 @@ void Sprite::setTexture(shared_ptr<Texture> texture) {
 	this->texture = texture;
 	
 	if (texture)
-		clip = Rect(Vec2(), texture->getDimensions());
+		clip = {Vec2(), texture->getDimensions()};
 }
 
 shared_ptr<Texture> Sprite::getTexture() {

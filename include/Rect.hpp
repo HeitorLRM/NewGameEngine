@@ -8,18 +8,6 @@ namespace engine {
 
 class Rect {
 public:
-	Rect();
-	Rect(
-		float x, 
-		float y,
-		float w,
-		float h
-	);
-	Rect(
-		const Vec2& origin, 
-		const Vec2& dimensions
-	);
-
 	float area() const;
 	bool contains(const Vec2&) const;
 	bool contains(const Rect&) const;
@@ -32,16 +20,10 @@ public:
 	void setEnd(const Vec2&);
 
 public:
-	float& x() {return origin.x;};
-	float& y() {return origin.y;};
-	float& w() {return dimensions.x;};
-	float& h() {return dimensions.y;};
-	const float& x() const {return origin.x;} ;
-	const float& y() const {return origin.y;} ;
-	const float& w() const {return dimensions.x;} ;
-	const float& h() const {return dimensions.y;} ;
-
-	Vec2 origin, dimensions;
+	union {
+		struct {Vec2 origin, dimensions;};
+		struct {float x, y, w, h;};
+	};
 };
 
 }

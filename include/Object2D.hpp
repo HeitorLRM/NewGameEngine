@@ -3,21 +3,23 @@
 #pragma once
 
 #include "GameObject.hpp"
-#include "Vec2.hpp"
+#include "Transform2D.hpp"
 
 namespace engine {
 
 class Object2D : public GameObject {
 public:
-	void setLocalPosition(const Vec2&);
-	Vec2& getLocalPosition();
-	Vec2 getGlobalPosition();
+	Transform2D& getTransform();
+	const Transform2D& getTransform() const;
+	const Transform2D& getGlobalTransform();
 
-protected:
-	Vec2 getParentGlobalPosition();
+private:
+	void mark_global_transform_dirty();
 
-	Vec2 local_position;
-
+private:
+	Transform2D transform;
+	Transform2D global_transform;
+	bool is_global_transform_dirty = false;
 };
 
 }

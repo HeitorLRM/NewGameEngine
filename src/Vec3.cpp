@@ -6,24 +6,13 @@
 
 using namespace engine;
 
-const Vec3 Vec3::ZERO	 ( 0, 0, 0);
-const Vec3 Vec3::UP		 ( 0, 1, 0);
-const Vec3 Vec3::DOWN	 ( 0,-1, 0);
-const Vec3 Vec3::LEFT	 (-1, 0, 0);
-const Vec3 Vec3::RIGHT	 ( 1, 0, 0);
-const Vec3 Vec3::FORWARD ( 0, 0,-1);
-const Vec3 Vec3::BACK    ( 0, 0, 1);
-
-Vec3::Vec3(float x, float y, float z) :
-	x(x),
-	y(y)
-{
-}
-
-Vec3::Vec3() :
-	Vec3(Vec3::ZERO)
-{
-}
+const Vec3 Vec3::ZERO	 { 0, 0, 0};
+const Vec3 Vec3::UP		 { 0, 1, 0};
+const Vec3 Vec3::DOWN	 { 0,-1, 0};
+const Vec3 Vec3::LEFT	 {-1, 0, 0};
+const Vec3 Vec3::RIGHT	 { 1, 0, 0};
+const Vec3 Vec3::FORWARD { 0, 0,-1};
+const Vec3 Vec3::BACK    { 0, 0, 1};
 
 bool Vec3::operator==(const Vec3& v) const {
 	return
@@ -37,59 +26,59 @@ bool Vec3::operator!=(const Vec3& v) const {
 }
 
 Vec3 Vec3::operator+(const Vec3& v) const {
-	return Vec3(
+	return {
 		x + v.x,
 		y + v.y,
 		z + v.z
-	);
+	};
 }
 
 Vec3 Vec3::operator-(const Vec3& v) const {
-	return Vec3(
+	return {
 		x - v.x,
 		y - v.y,
 		z - v.z
-	);
+	};
 }
 
 Vec3 Vec3::operator-() const {
-	return Vec3(
+	return {
 		-x,
 		-y,
 		-z
-	);
+	};
 }
 
 Vec3 Vec3::operator*(float f) const {
-	return Vec3(
+	return {
 		x * f,
 		y * f,
 		z * f
-	);
+	};
 }
 
 Vec3 Vec3::operator*(const Vec3& v) const {
-	return Vec3(
+	return {
 		x * v.x,
 		y * v.y,
 		z * v.z
-	);
+	};
 }
 
 Vec3 Vec3::operator/(float f) const {
-	return Vec3(
+	return {
 		x / f,
 		y / f,
 		z / f
-	);
+	};
 }
 
 Vec3 Vec3::operator/(const Vec3& v) const {
-	return Vec3(
+	return {
 		x / v.x,
 		y / v.y,
 		z / v.z
-	);
+	};
 }
 
 Vec3 operator*(float f, const Vec3& v) {
@@ -150,11 +139,11 @@ float Vec3::dot(const Vec3& v) const {
 }
 
 Vec3 Vec3::cross(const Vec3& v) const {
-	return Vec3(
+	return {
 		y*v.z - z*v.y,
 		x*v.z - z*v.x,
 		x*v.y - y*v.x
-	);
+	};
 }
 
 Vec3 Vec3::lerp(const Vec3& to, float t) const {
