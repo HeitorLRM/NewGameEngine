@@ -57,6 +57,27 @@ void TextureSDL::render(const Rect& clip, const Rect& dst) {
 		throw runtime_error("could not render texture."); // TODO error system
 }
 
+void TextureSDL::renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) {
+	SDL_Vertex vertices_sdl[4];
+
+	// Populate vertices
+	for (unsigned i = 0; i < 4; i++) vertices_sdl[i] = {
+		vertices[i].x, vertices[i].y,
+		1.0, 1.0, 1.0, 1.0,
+		uvs[i].x, uvs[i].y
+	};
+	const int indices[6] = {0, 1, 2, 2, 1, 3};
+
+	SDL_RenderGeometry(
+		target->getRenderer(), 
+		sdl_texture, 
+		vertices_sdl, 
+		4, 
+		indices, 
+		6
+	);
+}
+
 // SDLInterface ---------------------------------------------------------------------
 
 unsigned SDLInterface::instances = 0;

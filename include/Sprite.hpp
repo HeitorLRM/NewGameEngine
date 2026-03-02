@@ -15,6 +15,7 @@ class Texture {
 public:
 	// Abstract
 	virtual void render(const Rect& clip, const Rect& dst) = 0; // TODO Reci
+	virtual void renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) = 0;
 
 	static std::shared_ptr<Texture> loadFromFile(const std::string& filepath, std::weak_ptr<AppIO> interface);
 
@@ -28,14 +29,6 @@ protected:
 
 class Sprite : public Object2D {
 public:
-	enum Anchoring {
-		CENTER,
-		TOP_LEFT,
-		TOP_RIGHT,
-		BOTTOM_LEFT,
-		BOTTOM_RIGHT
-	};
-
 	void render() override;
 	
 	void setTexture(std::shared_ptr<Texture> texture);
@@ -44,7 +37,7 @@ public:
 	void setClip(const Rect& clip);
 	virtual Rect getClip();
 
-	Anchoring anchor = CENTER;
+	Vec2 pivot{0.0, 0.0};
 
 protected:
 	Rect clip;

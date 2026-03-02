@@ -32,28 +32,32 @@ void Sprite::render() {
 
 	if (!texture) return;
 	
-	Rect dst{getGlobalTransform().position, getClip().dimensions};
+	const Vec2& d = getClip().dimensions;
+	Vec2 vertices[4] {
+		Vec2{0.0, 0.0} - pivot, // Top Left
+		Vec2{d.x, 0.0} - pivot, // Top Right
+		Vec2{0.0, d.y} - pivot, // Bottom Left
+		Vec2{d.x, d.y} - pivot  // Bottom Right
+	};
 
-	switch (anchor) {
-        case CENTER:
-			dst.origin -= dst.dimensions/2;
-			break;
-        case TOP_LEFT:
-			break;
-        case TOP_RIGHT:
-			dst.origin.x -= dst.dimensions.x;
-			break;
-        case BOTTOM_LEFT:
-			dst.origin.y -= dst.dimensions.y;
-			break;
-        case BOTTOM_RIGHT:
-			dst.origin -= dst.dimensions;
-			break;
-        default: 
-			break;
-        }
+	const Transform2D& globalTransform = getGlobalTransform();
+	const Vec2& pos = globalTransform.position;
+	const Basis2D& basis = globalTransform.basis;
 
-        texture->render(getClip(), dst);
+	for (auto& vertex : vertices) {
+		vertex = vertex.x*basis.i + vertex.y*basis.j;
+		vertex += pos;
+	}
+
+	Vec2 t_d = texture->getDimensions();
+	Vec2 uvs[4] {
+		clip.origin / t_d, // Top Left
+		(clip.origin + Vec2{clip.w, 0.0}) / t_d, // Top Right
+		(clip.origin + Vec2{0.0, clip.h}) / t_d, // Bottom Left
+		clip.getEnd() / t_d // Bottom Right
+	};
+
+	texture->renderQuad(vertices, uvs);
 }
 
 void Sprite::setTexture(shared_ptr<Texture> texture) {

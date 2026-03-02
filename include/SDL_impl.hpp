@@ -23,6 +23,7 @@ public:
 	~TextureSDL();
 
 	void render(const Rect& clip, const Rect& dst) override;
+	void renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) override;
 
 private:
 	SDLInterface* target;

@@ -8,6 +8,10 @@
 namespace engine {
 
 class Basis2D {
+public:
+	Basis2D rotated(float angle) const;
+	Basis2D scaled(float s) const;
+
 public:		Vec2 i;
 private:	float padding0;
 public:		Vec2 j;
@@ -33,6 +37,10 @@ public:
 
 class Transform2D {
 public:
+	void translate(Vec2 translation);
+	void rotate(float angle);
+	void scale(float s);
+
 	Transform2D operator*(const Transform2D&) const;
 
 public:
