@@ -1,38 +1,16 @@
-// TODO ownership Heitor
-
 #pragma once
 
-#include "Sprite.hpp"
 #include "AppIO.hpp"
 #include "Vec2.hpp"
-
-#include <memory>
-#include <string>
 
 class SDL_Window;
 class SDL_Renderer;
 class SDL_Texture;
 class MIX_Mixer;
-namespace engine {
 
-class SDLInterface;
+namespace engine::SDL {
 
-class TextureSDL : public Texture {
-public:
-	TextureSDL(SDLInterface* target);
-	~TextureSDL();
-
-	void render(const Rect& clip, const Rect& dst) override;
-	void renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) override;
-
-private:
-	SDLInterface* target;
-	SDL_Texture* sdl_texture;
-	
-friend SDLInterface;
-}; // SDL wrapper
-
-class SDLInterface final : public AppIO {
+class AppIO final : public engine::AppIO {
 // Static
 private:
 	static void initSDL();
@@ -41,11 +19,11 @@ private:
 
 // Instance
 public:	
-	SDLInterface(
+	AppIO(
 		const std::string& windowTitle,
 		const Vec2& windowDimensions
 	);
-	~SDLInterface();
+	~AppIO();
 
 	bool shouldClose() override;
 	void render() override;
@@ -67,9 +45,4 @@ private:
 
 };
 
-
-
-
 }
-
-

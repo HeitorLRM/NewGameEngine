@@ -1,4 +1,5 @@
-#include "SDL_impl.hpp"
+#include "SDL_AppIO.hpp"
+#include "SDL_Texture.hpp"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
@@ -8,82 +9,19 @@
 #include <SDL3_mixer/SDL_mixer.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
-#include "AppIO.hpp"
-#include "Sprite.hpp"
-#include "Vec2.hpp"
-
 #include <memory>
+#include <string>
 #include <stdexcept>
 
-
-using namespace engine;
-
+using std::runtime_error;
 using std::string;
 using std::shared_ptr;
-using std::runtime_error;
+using namespace engine;
 
-TextureSDL::TextureSDL(SDLInterface* target) :
-	Texture(),
-	target(target),
-	sdl_texture(nullptr)
-{
-}
+unsigned SDL::AppIO::instances = 0;
 
-TextureSDL::~TextureSDL() {
-	SDL_DestroyTexture(sdl_texture);
-}
-
-void TextureSDL::render(const Rect& clip, const Rect& dst) {
-	SDL_FRect dstRect = SDL_FRect{
-		dst.x, 
-		dst.y, 
-		dst.w, 
-		dst.h 
-	};
-	SDL_FRect clipRect = SDL_FRect{
-		clip.x, 
-		clip.y, 
-		clip.w, 
-		clip.h 
-	};
-
-	bool success = SDL_RenderTexture(
-		target->getRenderer(), 
-		sdl_texture, 
-		&clipRect, 
-		&dstRect
-	);
-	if (!success)
-		throw runtime_error("could not render texture."); // TODO error system
-}
-
-void TextureSDL::renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) {
-	SDL_Vertex vertices_sdl[4];
-
-	// Populate vertices
-	for (unsigned i = 0; i < 4; i++) vertices_sdl[i] = {
-		vertices[i].x, vertices[i].y,
-		1.0, 1.0, 1.0, 1.0,
-		uvs[i].x, uvs[i].y
-	};
-	const int indices[6] = {0, 1, 2, 2, 1, 3};
-
-	SDL_RenderGeometry(
-		target->getRenderer(), 
-		sdl_texture, 
-		vertices_sdl, 
-		4, 
-		indices, 
-		6
-	);
-}
-
-// SDLInterface ---------------------------------------------------------------------
-
-unsigned SDLInterface::instances = 0;
-
-SDLInterface::SDLInterface(const string& windowTitle, const Vec2& windowDimensions) :
-	AppIO(),
+SDL::AppIO::AppIO(const string& windowTitle, const Vec2& windowDimensions) :
+	engine::AppIO(),
 	window(nullptr),
 	renderer(nullptr),
 	mixer(nullptr)
@@ -96,7 +34,7 @@ SDLInterface::SDLInterface(const string& windowTitle, const Vec2& windowDimensio
 	init(windowTitle, windowDimensions);
 }
 
-SDLInterface::~SDLInterface() {
+SDL::AppIO::~AppIO() {
 	close();
 
 	instances--;
@@ -105,7 +43,7 @@ SDLInterface::~SDLInterface() {
 		closeSDL();
 }
 
-void SDLInterface::initSDL() {
+void SDL::AppIO::initSDL() {
 	bool initialized;
 	// Initialize SDL
 	initialized = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -123,7 +61,7 @@ void SDLInterface::initSDL() {
 		throw runtime_error(SDL_GetError());
 }
 
-void SDLInterface::closeSDL() {
+void SDL::AppIO::closeSDL() {
 	// Close ttf
 	TTF_Quit();
 
@@ -135,7 +73,7 @@ void SDLInterface::closeSDL() {
 }
 
 
-bool SDLInterface::shouldClose() {
+bool SDL::AppIO::shouldClose() {
 	SDL_PumpEvents();
 	return SDL_PeepEvents(
 		NULL, 
@@ -146,21 +84,21 @@ bool SDLInterface::shouldClose() {
 	) > 0;
 }
 
-void SDLInterface::render() {
+void SDL::AppIO::render() {
 	if (renderer)
 		SDL_RenderPresent(renderer);
 }
 
-SDL_Window* SDLInterface::getWindow() {
+SDL_Window* SDL::AppIO::getWindow() {
 	return window;
 }
 
-SDL_Renderer* SDLInterface::getRenderer() {
+SDL_Renderer* SDL::AppIO::getRenderer() {
 	return renderer;
 }
 
-shared_ptr<Texture> SDLInterface::loadTextureFromFile(const std::string& file) {
-	TextureSDL* texture = new TextureSDL(this);
+shared_ptr<engine::Texture> SDL::AppIO::loadTextureFromFile(const std::string& file) {
+	SDL::Texture* texture = new SDL::Texture(this);
 
 	texture->sdl_texture = IMG_LoadTexture(
 		getRenderer(),
@@ -178,7 +116,7 @@ shared_ptr<Texture> SDLInterface::loadTextureFromFile(const std::string& file) {
 	return shared_ptr<Texture>(texture);
 }
 
-void SDLInterface::init(
+void SDL::AppIO::init(
 	const string& windowTitle,
 	const Vec2& windowDimensions
 ) {
@@ -199,7 +137,7 @@ void SDLInterface::init(
 	SDL_SetRenderVSync(renderer, 1); // TODO add frame cap option
 }
 
-void SDLInterface::close() {
+void SDL::AppIO::close() {
 	// Close window
 	SDL_DestroyRenderer(renderer);
 	renderer = nullptr;

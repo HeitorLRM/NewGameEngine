@@ -11,22 +11,6 @@
 
 namespace engine {
 
-class Texture {
-public:
-	// Abstract
-	virtual void render(const Rect& clip, const Rect& dst) = 0; // TODO Reci
-	virtual void renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) = 0;
-
-	static std::shared_ptr<Texture> loadFromFile(const std::string& filepath, std::weak_ptr<AppIO> interface);
-
-	Vec2 getDimensions();
-
-protected:
-	Vec2 dimensions; // TODO Vec2i
-
-};
-
-
 class Sprite : public Object2D {
 public:
 	void render() override;
@@ -52,13 +36,12 @@ public:
 	unsigned addFrame(const Rect&);
 	Rect& getFrame(unsigned);
 
-	void setCurrentFrame(unsigned);
-	unsigned getCurrentFrame();
-
 	Rect getClip() override;
 
-protected:
+public:
 	unsigned current_frame;
+
+protected:
 	std::vector<Rect> frames;
 
 };

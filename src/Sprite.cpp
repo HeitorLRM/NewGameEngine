@@ -4,28 +4,17 @@
 #include "Rect.hpp"
 #include "Vec2.hpp"
 #include "AppIO.hpp"
+#include "Texture.hpp"
+
 #include <memory>
 #include <vector>
 
 using namespace engine;
 using std::shared_ptr;
-using std::weak_ptr;
 using std::string;
 using std::vector;
 
 
-// Texture----------------------------------------
-Vec2 Texture::getDimensions() {
-	return dimensions;
-}
-
-shared_ptr<Texture> Texture::loadFromFile(const string& filename, weak_ptr<AppIO> interface) {
-	auto i = interface.lock();
-	if (!i) return nullptr;
-	return i->loadTextureFromFile(filename);
-}
-
-// Sprite ----------------------------------------
 void Sprite::render() {
 	// call super
 	Object2D::render();
@@ -94,15 +83,7 @@ Rect& SpriteSheet::getFrame(unsigned index) {
 	return frames[index];
 }
 
-void SpriteSheet::setCurrentFrame(unsigned index) {
-	this->current_frame = index;
-}
-
-unsigned SpriteSheet::getCurrentFrame() {
-	return current_frame;
-}
-
 Rect SpriteSheet::getClip() {
-	return getFrame(getCurrentFrame());
+	return getFrame(current_frame);
 }
 
