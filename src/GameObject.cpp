@@ -1,6 +1,9 @@
 // TODO ownership: Heitor
 
 #include "GameObject.hpp"
+#include "AppIO.hpp"
+#include "Game.hpp"
+#include "KeyboardInput.hpp"
 #include "Stage.hpp"
 #include <memory>
 #include <vector>
@@ -43,6 +46,25 @@ void GameObject::setParent(GameObject* parent) {
 
 GameObject* GameObject::getParent() {
 	return parent;
+}
+
+Game* GameObject::getGame() const {
+	if (stage)
+		return stage->getGame();
+	return nullptr;
+}
+
+const KeyboardInput* GameObject::getKeyboardInput() const {
+	Game* g;
+	AppIO* io;
+	if (
+		(g = getGame()) 
+		&& 
+		(io = g->getInterface().get())
+	)
+		return &io->getKeyboard();
+	
+	return nullptr;
 }
 
 void GameObject::addChild(shared_ptr<GameObject> child) {

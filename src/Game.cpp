@@ -7,7 +7,6 @@
 
 using namespace engine;
 using std::shared_ptr;
-using std::weak_ptr;
 
 Game::Game() :
 	quit_requested(false),
@@ -22,14 +21,14 @@ void Game::requestQuit() {
 bool Game::shouldQuit() {
 	return
 		// Check if interface has requested to stop the game
-		(getInterface().lock() && getInterface().lock()->shouldClose()) ||
+		(interface && interface->shouldClose()) ||
 
 		// Check if game logic requested stop
 		quit_requested
 	;
 }
 
-weak_ptr<AppIO> Game::getInterface() {
+shared_ptr<AppIO> Game::getInterface() {
 	return interface;
 }
 
@@ -65,6 +64,9 @@ void Game::run() {
 }
 
 void Game::mainLoop() {
+	if (interface)
+		interface->update();
+
 	for (auto stage : loaded_stages) {
 		stage->update(1.0/30.0);
 		stage->render();

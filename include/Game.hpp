@@ -17,7 +17,7 @@ public:
 	void run();
 	void requestQuit();
 	
-	std::weak_ptr<AppIO> getInterface();
+	std::shared_ptr<AppIO> getInterface();
 
 protected:
 	void loadStage(std::shared_ptr<Stage>);

@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Game.hpp"
+#include "KeyboardInput.hpp"
 #include <memory>
 #include <vector>
 namespace engine {
@@ -22,6 +24,9 @@ public:
 
 	GameObject* getParent();
 	virtual void setParent(GameObject*);
+
+	Game* getGame() const;
+	const KeyboardInput* getKeyboardInput() const;
 
 	void addChild(std::shared_ptr<GameObject>);
 	void addChild(std::shared_ptr<GameObject>, unsigned index);

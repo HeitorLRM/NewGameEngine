@@ -26,6 +26,7 @@ public:
 	~AppIO();
 
 	bool shouldClose() override;
+	void update() override;
 	void render() override;
 	SDL_Window* getWindow();
 	SDL_Renderer* getRenderer();
@@ -37,6 +38,7 @@ private:
 		const Vec2& windowDimensions
 	);
 	void close();
+	void updateKeyboard();
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;
