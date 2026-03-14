@@ -2,13 +2,15 @@
 
 #pragma once
 
+#include "AppIO.hpp"
+
 #include <memory>
-#include <set>
+#include <vector>
 
 namespace engine {
 
-class Stage;
 class AppIO;
+class Stage;
 
 class Game {
 public:
@@ -20,8 +22,8 @@ public:
 	std::shared_ptr<AppIO> getInterface();
 
 protected:
-	void loadStage(std::shared_ptr<Stage>);
-	void unloadStage(std::shared_ptr<Stage>);
+	void loadStage(Ref<Stage>);
+	void unloadStage(Ref<Stage>);
 	void setInterface(std::shared_ptr<AppIO>);
 
 	virtual void init() = 0;
@@ -30,11 +32,11 @@ protected:
 	virtual void mainLoop();
 	virtual bool shouldQuit();
 
-	const std::set<std::shared_ptr<Stage>>& getLoadedStages();
+	const std::vector<Ref<Stage>>& getLoadedStages();
 
 private:
 	bool quit_requested;
-	std::set<std::shared_ptr<Stage>> loaded_stages;
+	std::vector<Ref<Stage>> loaded_stages;
 	std::shared_ptr<AppIO> interface;
 };
 

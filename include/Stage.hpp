@@ -1,30 +1,30 @@
 // TODO ownership: Heitor
 
 #pragma once
-#include <memory>
+#include "GameObject.hpp"
+#include "Ref.hpp"
 namespace engine {
 
 class Game;
-class GameObject;
 
-class Stage {
+class Stage : public Resource {
 public:
 	Stage(Game* game);
 
+	virtual void load() override;
+	virtual void unload() override;
 	virtual void update(float delta_time);
 	virtual void render();
-	virtual void load();
-	virtual void unload();
 
 	Game* getGame();
 
 	GameObject* getRoot();
-	void setRoot(std::shared_ptr<GameObject>);
+	void setRoot(Ref<GameObject>);
 
 protected:
 	Game* game;
 
-	std::shared_ptr<GameObject> root;
+	Ref<GameObject> root;
 
 };
 

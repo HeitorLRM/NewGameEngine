@@ -5,7 +5,6 @@
 #include <string>
 
 using namespace engine;
-using std::shared_ptr;
 using std::weak_ptr;
 using std::string;
 
@@ -13,8 +12,8 @@ Vec2 Texture::getDimensions() {
 	return dimensions;
 }
 
-shared_ptr<Texture> Texture::loadFromFile(const string& filename, weak_ptr<AppIO> interface) {
+Ref<Texture> Texture::loadFromFile(const string& filename, weak_ptr<AppIO> interface) {
 	auto i = interface.lock();
-	if (!i) return nullptr;
+	if (!i) return Ref<Texture>();
 	return i->loadTextureFromFile(filename);
 }

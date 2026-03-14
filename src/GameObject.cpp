@@ -4,13 +4,12 @@
 #include "AppIO.hpp"
 #include "Game.hpp"
 #include "KeyboardInput.hpp"
+#include "Ref.hpp"
 #include "Stage.hpp"
-#include <memory>
 #include <vector>
 
 using namespace engine;
 
-using std::shared_ptr;
 using std::vector;
 
 GameObject::GameObject() :
@@ -67,18 +66,22 @@ const KeyboardInput* GameObject::getKeyboardInput() const {
 	return nullptr;
 }
 
-void GameObject::addChild(shared_ptr<GameObject> child) {
+void GameObject::addChild(Ref<GameObject> child) {
 	addChild(child, children.size());
 }
 
-void GameObject::addChild(shared_ptr<GameObject> child, unsigned index) {
+void GameObject::addChild(Ref<GameObject> child, unsigned index) {
 	// Do not add the same child twice
 	if (child->getParent() == this)
 		return;
 
 	child->setParent(this);
-	
 	children.insert(children.begin() + index, child);
+
+	if (is_loaded)
+		child.load_ref();
+	else if (child->is_loaded)
+		child.unload_ref();
 }
 
 void GameObject::removeChild(GameObject* child) {
@@ -95,7 +98,7 @@ void GameObject::removeChild(GameObject* child) {
 	children.erase(it);
 }
 
-vector<shared_ptr<GameObject>>& GameObject::getChildren() {
+vector<Ref<GameObject>>& GameObject::getChildren() {
 	return children;
 }
 
@@ -111,4 +114,14 @@ void GameObject::render() {
 	}
 }
 
+void GameObject::load() {
+	for (auto& child : children)
+		child.load_ref();
+	Resource::load();
+}
 
+void GameObject::unload() {
+	for (auto& child : children)
+		child.unload_ref();
+	Resource::unload();
+}

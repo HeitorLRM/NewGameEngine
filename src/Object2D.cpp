@@ -3,7 +3,6 @@
 #include "Object2D.hpp"
 #include "GameObject.hpp"
 #include "Transform2D.hpp"
-#include <memory>
 
 using namespace engine;
 

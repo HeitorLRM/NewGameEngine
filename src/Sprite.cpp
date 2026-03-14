@@ -6,11 +6,9 @@
 #include "AppIO.hpp"
 #include "Texture.hpp"
 
-#include <memory>
 #include <vector>
 
 using namespace engine;
-using std::shared_ptr;
 using std::string;
 using std::vector;
 
@@ -19,7 +17,7 @@ void Sprite::render() {
 	// call super
 	Object2D::render();
 
-	if (!texture) return;
+	if (!texture.get()) return;
 	
 	const Vec2& d = getClip().dimensions;
 	Vec2 vertices[4] {
@@ -49,14 +47,14 @@ void Sprite::render() {
 	texture->renderQuad(vertices, uvs);
 }
 
-void Sprite::setTexture(shared_ptr<Texture> texture) {
+void Sprite::setTexture(Ref<Texture> texture) {
 	this->texture = texture;
 	
-	if (texture)
+	if (texture.get())
 		clip = {Vec2(), texture->getDimensions()};
 }
 
-shared_ptr<Texture> Sprite::getTexture() {
+Ref<Texture> Sprite::getTexture() {
 	return texture;
 }
 

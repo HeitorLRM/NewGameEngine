@@ -4,18 +4,19 @@
 
 #include "Game.hpp"
 #include "KeyboardInput.hpp"
-#include <memory>
+#include "Ref.hpp"
 #include <vector>
 namespace engine {
 
 class Stage;
-
-class GameObject {
+class GameObject : public Resource {
 public:
 	GameObject();
 
 	virtual ~GameObject() = default;
 
+	virtual void load() override;
+	virtual void unload() override;
 	virtual void update(float delta_time);
 	virtual void render();
 
@@ -28,13 +29,13 @@ public:
 	Game* getGame() const;
 	const KeyboardInput* getKeyboardInput() const;
 
-	void addChild(std::shared_ptr<GameObject>);
-	void addChild(std::shared_ptr<GameObject>, unsigned index);
+	void addChild(Ref<GameObject>);
+	void addChild(Ref<GameObject>, unsigned index);
 	void removeChild(GameObject*);
-	std::vector<std::shared_ptr<GameObject>>& getChildren();
+	std::vector<Ref<GameObject>>& getChildren();
 
 private:
-	std::vector<std::shared_ptr<GameObject>> children;
+	std::vector<Ref<GameObject>> children;
 
 	Stage* stage;
 	GameObject* parent;

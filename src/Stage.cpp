@@ -3,13 +3,13 @@
 #include "Stage.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
-#include <memory>
+#include "Resource.hpp"
 
 using namespace engine;
-using std::shared_ptr;
 
 Stage::Stage(Game* game) :
-	game(game)
+	game(game),
+	root(nullptr)
 {
 
 }
@@ -23,9 +23,13 @@ void Stage::render() {
 }
 
 void Stage::load() {
+	Resource::load();
+	root.load_ref();
 }
 
 void Stage::unload() {
+	Resource::unload();
+	root.unload_ref();
 }
 
 Game* Stage::getGame() {
@@ -36,9 +40,14 @@ GameObject* Stage::getRoot() {
 	return root.get();
 }
 
-void Stage::setRoot(shared_ptr<GameObject> root) {
+void Stage::setRoot(Ref<GameObject> root) {
+	if (this->root)
+		this->root.unload_ref();
+
 	this->root = root;
 
-	getRoot()->setStage(this);
+	root->setStage(this);
+	if (is_loaded)
+		root.load_ref();
 }
 

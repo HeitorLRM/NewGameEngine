@@ -2,6 +2,7 @@
 #include "KeyboardInput.hpp"
 #include "SDL_Texture.hpp"
 #include "SDL_keycode.h"
+#include "Texture.hpp"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
@@ -11,13 +12,11 @@
 #include <SDL3_mixer/SDL_mixer.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
-#include <memory>
 #include <string>
 #include <stdexcept>
 
 using std::runtime_error;
 using std::string;
-using std::shared_ptr;
 using namespace engine;
 
 unsigned SDL::AppIO::instances = 0;
@@ -180,7 +179,7 @@ SDL_Renderer* SDL::AppIO::getRenderer() {
 	return renderer;
 }
 
-shared_ptr<engine::Texture> SDL::AppIO::loadTextureFromFile(const std::string& file) {
+Ref<engine::Texture> SDL::AppIO::loadTextureFromFile(const std::string& file) {
 	SDL::Texture* texture = new SDL::Texture(this);
 
 	texture->sdl_texture = IMG_LoadTexture(
@@ -196,7 +195,7 @@ shared_ptr<engine::Texture> SDL::AppIO::loadTextureFromFile(const std::string& f
 		);
 	
 
-	return shared_ptr<Texture>(texture);
+	return Ref<engine::Texture>(texture);
 }
 
 void SDL::AppIO::init(

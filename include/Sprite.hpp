@@ -5,8 +5,9 @@
 #include "AppIO.hpp"
 #include "Object2D.hpp"
 #include "Rect.hpp"
+#include "Texture.hpp"
 #include "Vec2.hpp"
-#include <memory>
+
 #include <vector>
 
 namespace engine {
@@ -15,8 +16,8 @@ class Sprite : public Object2D {
 public:
 	void render() override;
 	
-	void setTexture(std::shared_ptr<Texture> texture);
-	std::shared_ptr<Texture> getTexture();
+	void setTexture(Ref<Texture> texture);
+	Ref<Texture> getTexture();
 
 	void setClip(const Rect& clip);
 	virtual Rect getClip();
@@ -26,7 +27,7 @@ public:
 protected:
 	Rect clip;
 
-	std::shared_ptr<Texture> texture;
+	Ref<Texture> texture;
 };
 
 

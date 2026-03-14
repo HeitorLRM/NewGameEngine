@@ -30,7 +30,7 @@ public:
 	void render() override;
 	SDL_Window* getWindow();
 	SDL_Renderer* getRenderer();
-	std::shared_ptr<Texture> loadTextureFromFile(const std::string& file) override;
+	Ref<Texture> loadTextureFromFile(const std::string& file) override;
 
 private:
 	void init(

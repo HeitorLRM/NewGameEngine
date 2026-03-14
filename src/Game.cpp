@@ -3,10 +3,13 @@
 #include "Game.hpp"
 #include "Stage.hpp"
 #include "AppIO.hpp"
+#include <algorithm>
 #include <memory>
+#include <vector>
 
 using namespace engine;
 using std::shared_ptr;
+using std::find;
 
 Game::Game() :
 	quit_requested(false),
@@ -32,20 +35,19 @@ shared_ptr<AppIO> Game::getInterface() {
 	return interface;
 }
 
-void Game::loadStage(shared_ptr<Stage> stage) {
-	loaded_stages.insert(stage);
-	// TODO error if already in set
-	stage->load();
+void Game::loadStage(Ref<Stage> stage) {
+	loaded_stages.push_back(stage);
+	// TODO error if already loaded
+	loaded_stages.back().load_ref();
 }
 
-void Game::unloadStage(shared_ptr<Stage> stage) {
-	loaded_stages.erase(stage);
-	// TODO error if not in set
-	stage->unload();
+void Game::unloadStage(Ref<Stage> stage) {
+	loaded_stages.erase(find(loaded_stages.begin(), loaded_stages.end(),stage));
+	// TODO error if not loaded
+	stage.unload_ref();
 }
 
-
-const std::set<std::shared_ptr<Stage>>& Game::getLoadedStages() {
+const std::vector<Ref<Stage>>& Game::getLoadedStages() {
 	return loaded_stages;
 }
 

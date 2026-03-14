@@ -3,7 +3,9 @@
 #pragma once
 
 #include "KeyboardInput.hpp"
-#include <memory>
+#include "Ref.hpp"
+
+#include <string>
 namespace engine {
 
 class Texture;
@@ -18,7 +20,7 @@ public:
 
 	const KeyboardInput& getKeyboard() const {return keyboard;};
 
-	virtual std::shared_ptr<Texture> loadTextureFromFile(const std::string& file) = 0;
+	virtual Ref<Texture> loadTextureFromFile(const std::string& file) = 0;
 
 protected:
 	
