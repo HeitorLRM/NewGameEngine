@@ -8,13 +8,16 @@
 #include "Texture.hpp"
 #include "Vec2.hpp"
 
+#include <string>
 #include <vector>
 
 namespace engine {
 
 class Sprite : public Object2D {
 public:
-	void render() override;
+	virtual void load() override;
+	virtual void unload() override;
+	virtual void render() override;
 	
 	void setTexture(Ref<Texture> texture);
 	Ref<Texture> getTexture();
@@ -25,8 +28,13 @@ public:
 	Vec2 pivot{0.0, 0.0};
 
 protected:
+	void loadTexture();
+	void unloadTexture();
+
+protected:
 	Rect clip;
 
+	std::string load_path;
 	Ref<Texture> texture;
 };
 

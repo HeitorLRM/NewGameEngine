@@ -8,28 +8,32 @@
 using namespace engine;
 
 Stage::Stage(Game* game) :
-	game(game),
-	root(nullptr)
+	game(game)
 {
-
 }
 
 void Stage::update(float delta_time) {
-	root->update(delta_time);
+	if (root)
+		root->update(delta_time);
 }
 
 void Stage::render() {
-	root->render();
+	if (root)
+		root->render();
 }
 
 void Stage::load() {
 	Resource::load();
-	root.load_ref();
+
+	if (root)
+		root.load_ref();
 }
 
 void Stage::unload() {
 	Resource::unload();
-	root.unload_ref();
+	
+	if (root)
+		root.unload_ref();
 }
 
 Game* Stage::getGame() {
@@ -46,8 +50,8 @@ void Stage::setRoot(Ref<GameObject> root) {
 
 	this->root = root;
 
-	root->setStage(this);
+	this->root->setStage(this);
 	if (is_loaded)
-		root.load_ref();
+		this->root.load_ref();
 }
 

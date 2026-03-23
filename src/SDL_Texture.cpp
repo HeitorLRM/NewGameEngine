@@ -1,6 +1,8 @@
 #include "SDL_Texture.hpp"
+#include "Texture.hpp"
 
 #include <SDL3/SDL_render.h>
+#include <SDL3_image/SDL_image.h>
 
 #include <stdexcept>
 
@@ -15,7 +17,25 @@ SDL::Texture::Texture(SDL::AppIO* target) :
 {
 }
 
-SDL::Texture::~Texture() {
+void SDL::Texture::load() {
+	engine::Texture::load();
+
+	sdl_texture = IMG_LoadTexture(
+		target->getRenderer(),
+		load_path.c_str()
+	);
+
+	if (sdl_texture != nullptr)
+		SDL_GetTextureSize(
+			sdl_texture, 
+			&dimensions.x, 
+			&dimensions.y
+		);
+}
+
+void SDL::Texture::unload() {
+	engine::Texture::unload();
+	
 	SDL_DestroyTexture(sdl_texture);
 }
 

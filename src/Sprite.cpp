@@ -1,6 +1,7 @@
 // TODO ownership: Heitor
 
 #include "Sprite.hpp"
+#include "Object2D.hpp"
 #include "Rect.hpp"
 #include "Vec2.hpp"
 #include "AppIO.hpp"
@@ -12,6 +13,29 @@ using namespace engine;
 using std::string;
 using std::vector;
 
+void Sprite::load() {
+	Object2D::load();
+	
+	loadTexture();
+}
+
+void Sprite::unload() {
+	Object2D::unload();
+
+	unloadTexture();
+}
+
+void Sprite::loadTexture() {
+	if (texture) {
+		texture.load_ref();
+		clip = {Vec2(), texture->getDimensions()};
+	}
+}
+
+void Sprite::unloadTexture() {
+	if (texture)
+		texture.unload_ref();
+}
 
 void Sprite::render() {
 	// call super
@@ -49,6 +73,9 @@ void Sprite::render() {
 
 void Sprite::setTexture(Ref<Texture> texture) {
 	this->texture = texture;
+	
+	if (is_loaded)
+		this->texture.load_ref();
 	
 	if (texture.get())
 		clip = {Vec2(), texture->getDimensions()};

@@ -2,7 +2,6 @@
 
 #include "Resource.hpp"
 
-#include <iostream>
 #include <type_traits>
 
 namespace engine {
@@ -51,6 +50,9 @@ private:
 
 template<typename T>
 Ref<T>::Ref(T* resource) {
+	if (!resource)
+		return;
+
 	static_assert(
 		std::is_base_of_v<Resource, T> == true, 
 		"Type must inherit Resource."
@@ -93,7 +95,6 @@ void Ref<T>::load_ref() {
 	if (has_loaded || !control)	return;
 
 	has_loaded = true;
-	std::cout << "Reference Loaded" << std::endl;
 
 	if(control->load_count++ <= 0) {
 		control->load_res();
@@ -105,7 +106,6 @@ void Ref<T>::unload_ref() {
 	if (!has_loaded || !control) return;
 
 	has_loaded = false;
-	std::cout << "Reference Unloaded" << std::endl;
 
 	if (--control->load_count <= 0)
 		control->unload_res();

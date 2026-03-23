@@ -22,16 +22,17 @@ public:
 	std::shared_ptr<AppIO> getInterface();
 
 protected:
-	void loadStage(Ref<Stage>);
-	void unloadStage(Ref<Stage>);
-	void setInterface(std::shared_ptr<AppIO>);
 
 	virtual void init() = 0;
-	virtual void close() = 0;
+	virtual void close();
 
 	virtual void mainLoop();
 	virtual bool shouldQuit();
 
+	void loadStage(Ref<Stage>);
+	void unloadStage(Ref<Stage>);
+	void setInterface(std::shared_ptr<AppIO>);
+	
 	const std::vector<Ref<Stage>>& getLoadedStages();
 
 private:

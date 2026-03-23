@@ -5,7 +5,7 @@
 #include "Game.hpp"
 #include "KeyboardInput.hpp"
 #include "Ref.hpp"
-#include <vector>
+#include <list>
 namespace engine {
 
 class Stage;
@@ -32,10 +32,10 @@ public:
 	void addChild(Ref<GameObject>);
 	void addChild(Ref<GameObject>, unsigned index);
 	void removeChild(GameObject*);
-	std::vector<Ref<GameObject>>& getChildren();
+	std::list<Ref<GameObject>>& getChildren();
 
 private:
-	std::vector<Ref<GameObject>> children;
+	std::list<Ref<GameObject>> children;
 
 	Stage* stage;
 	GameObject* parent;

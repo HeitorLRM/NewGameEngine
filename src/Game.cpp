@@ -78,3 +78,10 @@ void Game::mainLoop() {
 		interface->render();
 }
 
+void Game::close() {
+	for (auto& stage : loaded_stages)
+		unloadStage(stage);
+	
+	setInterface(nullptr);
+}
+

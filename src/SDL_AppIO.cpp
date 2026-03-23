@@ -179,22 +179,9 @@ SDL_Renderer* SDL::AppIO::getRenderer() {
 	return renderer;
 }
 
-Ref<engine::Texture> SDL::AppIO::loadTextureFromFile(const std::string& file) {
+Ref<engine::Texture> SDL::AppIO::loadTextureFromFile(const std::string& filepath) {
 	SDL::Texture* texture = new SDL::Texture(this);
-
-	texture->sdl_texture = IMG_LoadTexture(
-		getRenderer(),
-		file.c_str()
-	);
-
-	if (texture->sdl_texture != nullptr)
-		SDL_GetTextureSize(
-			texture->sdl_texture, 
-			&texture->dimensions.x, 
-			&texture->dimensions.y
-		);
-	
-
+	texture->load_path = filepath;
 	return Ref<engine::Texture>(texture);
 }
 

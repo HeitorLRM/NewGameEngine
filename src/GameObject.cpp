@@ -6,11 +6,11 @@
 #include "KeyboardInput.hpp"
 #include "Ref.hpp"
 #include "Stage.hpp"
-#include <vector>
+#include <iterator>
 
 using namespace engine;
 
-using std::vector;
+using std::list;
 
 GameObject::GameObject() :
 	stage(nullptr),
@@ -76,12 +76,13 @@ void GameObject::addChild(Ref<GameObject> child, unsigned index) {
 		return;
 
 	child->setParent(this);
-	children.insert(children.begin() + index, child);
+
+	auto it = children.begin();
+	std::advance(it, index);
+	it = children.insert(it, child);
 
 	if (is_loaded)
-		child.load_ref();
-	else if (child->is_loaded)
-		child.unload_ref();
+		it->load_ref();
 }
 
 void GameObject::removeChild(GameObject* child) {
@@ -98,7 +99,7 @@ void GameObject::removeChild(GameObject* child) {
 	children.erase(it);
 }
 
-vector<Ref<GameObject>>& GameObject::getChildren() {
+list<Ref<GameObject>>& GameObject::getChildren() {
 	return children;
 }
 
@@ -115,13 +116,13 @@ void GameObject::render() {
 }
 
 void GameObject::load() {
+	Resource::load();
 	for (auto& child : children)
 		child.load_ref();
-	Resource::load();
 }
 
 void GameObject::unload() {
+	Resource::unload();
 	for (auto& child : children)
 		child.unload_ref();
-	Resource::unload();
 }

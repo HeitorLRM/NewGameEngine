@@ -6,22 +6,28 @@
 #include "Vec2.hpp"
 
 #include <memory>
+#include <string>
 
 namespace engine {
 
-class Texture : public Resource{
+class Texture : public Resource {
+// Abstract
 public:
-	// Abstract
-	virtual void render(const Rect& clip, const Rect& dst) = 0; // TODO Reci
+	virtual void load() override;
+	virtual void unload() override;
+	virtual void render(const Rect& clip, const Rect& dst) = 0;
 	virtual void renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) = 0;
 
-	static Ref<Texture> loadFromFile(const std::string& filepath, std::weak_ptr<AppIO> interface);
+	static Ref<Texture> fromFile(const std::string& filepath, std::weak_ptr<AppIO> interface);
 
 	Vec2 getDimensions();
 
 protected:
-	Vec2 dimensions; // TODO Vec2i
 
+protected:
+	std::string load_path;
+
+	Vec2 dimensions;
 };
 
 }

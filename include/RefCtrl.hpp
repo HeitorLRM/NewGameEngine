@@ -10,7 +10,7 @@ public:
 	void unload_res();
 
 public:
-	Resource* resource;
+	Resource* resource = nullptr;
 	int ref_count;
 	int load_count;
 };
