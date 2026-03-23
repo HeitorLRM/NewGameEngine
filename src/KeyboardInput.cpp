@@ -56,7 +56,7 @@ KeyboardState KeyboardState::operator^(const KeyboardState& k) const {
 KeyboardState KeyboardState::operator~() const {
 	KeyboardState ret;
 	for (int i=0; i<sizeof(ret); i++) {
-		ret.keys[i] = ~ret.keys[i];
+		ret.keys[i] = ~keys[i];
 	}
 	return ret;
 }

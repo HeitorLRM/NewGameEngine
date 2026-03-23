@@ -4,8 +4,8 @@
 
 #include "AppIO.hpp"
 
+#include <list>
 #include <memory>
-#include <vector>
 
 namespace engine {
 
@@ -33,11 +33,11 @@ protected:
 	void unloadStage(Ref<Stage>);
 	void setInterface(std::shared_ptr<AppIO>);
 	
-	const std::vector<Ref<Stage>>& getLoadedStages();
+	const std::list<Ref<Stage>>& getLoadedStages();
 
 private:
 	bool quit_requested;
-	std::vector<Ref<Stage>> loaded_stages;
+	std::list<Ref<Stage>> loaded_stages;
 	std::shared_ptr<AppIO> interface;
 };
 

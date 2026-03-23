@@ -5,7 +5,6 @@
 #include "AppIO.hpp"
 #include <algorithm>
 #include <memory>
-#include <vector>
 
 using namespace engine;
 using std::shared_ptr;
@@ -43,11 +42,9 @@ void Game::loadStage(Ref<Stage> stage) {
 
 void Game::unloadStage(Ref<Stage> stage) {
 	loaded_stages.erase(find(loaded_stages.begin(), loaded_stages.end(),stage));
-	// TODO error if not loaded
-	stage.unload_ref();
 }
 
-const std::vector<Ref<Stage>>& Game::getLoadedStages() {
+const std::list<Ref<Stage>>& Game::getLoadedStages() {
 	return loaded_stages;
 }
 
@@ -79,9 +76,7 @@ void Game::mainLoop() {
 }
 
 void Game::close() {
-	for (auto& stage : loaded_stages)
-		unloadStage(stage);
-	
+	loaded_stages.clear();	
 	setInterface(nullptr);
 }
 
