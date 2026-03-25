@@ -2,43 +2,36 @@
 
 #pragma once
 
-#include "AppIO.hpp"
-
-#include <list>
-#include <memory>
-
+#include "Ref.hpp"
 namespace engine {
 
-class AppIO;
 class Stage;
 
 class Game {
 public:
-	Game();
+	Game() = delete;
 
-	void run();
-	void requestQuit();
+	static void run();
+	static void requestQuit();
 	
-	std::shared_ptr<AppIO> getInterface();
-
-protected:
-
-	virtual void init() = 0;
-	virtual void close();
-
-	virtual void mainLoop();
-	virtual bool shouldQuit();
-
-	void loadStage(Ref<Stage>);
-	void unloadStage(Ref<Stage>);
-	void setInterface(std::shared_ptr<AppIO>);
-	
-	const std::list<Ref<Stage>>& getLoadedStages();
+	static void loadStage(Ref<Stage>);
+	static void unloadStage();
+	static Ref<Stage> getStage();
 
 private:
-	bool quit_requested;
-	std::list<Ref<Stage>> loaded_stages;
-	std::shared_ptr<AppIO> interface;
+	static void init();
+	static void close();
+
+	static void mainLoop();
+	static bool shouldQuit();
+	
+public:
+	static void (*init_callback)();
+	static void (*close_callback)();
+
+private:
+	static bool quit_requested;
+	static Ref<Stage> loaded_stage;
 };
 
 }

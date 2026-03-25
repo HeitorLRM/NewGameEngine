@@ -3,28 +3,21 @@
 #pragma once
 
 #include "KeyboardInput.hpp"
-#include "Ref.hpp"
 
-#include <string>
 namespace engine {
 
 class Texture;
 
-class AppIO {
-public:
-	virtual ~AppIO() = default;
+namespace AppIO {
 
-	virtual void update() = 0;
-	virtual void render() = 0;
-	virtual bool shouldClose() = 0;
+extern void init();
+extern void close();
+extern void update();
+extern void render();
+extern bool shouldClose();
 
-	const KeyboardInput& getKeyboard() const {return keyboard;};
+extern KeyboardInput keyboard;
 
-	virtual Ref<Texture> loadTextureFromFile(const std::string& file) = 0;
-
-protected:
-	
-	KeyboardInput keyboard;
 };
 
 }

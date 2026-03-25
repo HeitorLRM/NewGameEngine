@@ -1,4 +1,5 @@
 #include "SDL_Texture.hpp"
+#include "SDL_AppIO.hpp"
 #include "Texture.hpp"
 
 #include <SDL3/SDL_render.h>
@@ -8,11 +9,27 @@
 
 using namespace engine;
 using std::runtime_error;
+using std::string;
 
+// Texture -----------------------------------------
 
-SDL::Texture::Texture(SDL::AppIO* target) :
+void Texture::load() {
+	Resource::load();
+}
+
+void Texture::unload() {
+	Resource::unload();
+}
+
+Ref<Texture> engine::Texture::fromFile(const string& filename) {
+	auto ret = AppIO::SDL::loadTextureFromFile(filename);
+	return ret;
+}
+
+// SDL::Texture -----------------------------------------
+
+SDL::Texture::Texture() :
 	engine::Texture(),
-	target(target),
 	sdl_texture(nullptr)
 {
 }
@@ -21,7 +38,7 @@ void SDL::Texture::load() {
 	engine::Texture::load();
 
 	sdl_texture = IMG_LoadTexture(
-		target->getRenderer(),
+		AppIO::SDL::renderer,
 		load_path.c_str()
 	);
 
@@ -54,7 +71,7 @@ void SDL::Texture::render(const Rect& clip, const Rect& dst) {
 	};
 
 	bool success = SDL_RenderTexture(
-		target->getRenderer(), 
+		AppIO::SDL::renderer, 
 		sdl_texture, 
 		&clipRect, 
 		&dstRect
@@ -75,7 +92,7 @@ void SDL::Texture::renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) {
 	const int indices[6] = {0, 1, 2, 2, 1, 3};
 
 	SDL_RenderGeometry(
-		target->getRenderer(), 
+		AppIO::SDL::renderer, 
 		sdl_texture, 
 		vertices_sdl, 
 		4, 

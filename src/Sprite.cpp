@@ -28,7 +28,7 @@ void Sprite::unload() {
 void Sprite::loadTexture() {
 	if (texture) {
 		texture.load_ref();
-		clip = {Vec2(), texture->getDimensions()};
+		clip = {Vec2(), texture->dimensions};
 	}
 }
 
@@ -60,7 +60,7 @@ void Sprite::render() {
 		vertex += pos;
 	}
 
-	Vec2 t_d = texture->getDimensions();
+	Vec2 t_d = texture->dimensions;
 	Vec2 uvs[4] {
 		clip.origin / t_d, // Top Left
 		(clip.origin + Vec2{clip.w, 0.0}) / t_d, // Top Right
@@ -78,7 +78,7 @@ void Sprite::setTexture(Ref<Texture> texture) {
 		this->texture.load_ref();
 	
 	if (texture.get())
-		clip = {Vec2(), texture->getDimensions()};
+		clip = {Vec2(), texture->dimensions};
 }
 
 Ref<Texture> Sprite::getTexture() {

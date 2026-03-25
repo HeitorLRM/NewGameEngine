@@ -9,7 +9,7 @@ namespace engine::SDL {
 
 class Texture : public engine::Texture {
 public:
-	Texture(SDL::AppIO* target);
+	Texture();
 
 	void load() override;
 	void unload() override;
@@ -17,10 +17,8 @@ public:
 	void renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) override;
 
 private:
-	SDL::AppIO* target;
 	SDL_Texture* sdl_texture;
 	
-friend SDL::AppIO;
 };
 
 }

@@ -1,16 +1,10 @@
 // TODO ownership: Heitor
 
 #include "Stage.hpp"
-#include "Game.hpp"
 #include "GameObject.hpp"
 #include "Resource.hpp"
 
 using namespace engine;
-
-Stage::Stage(Game* game) :
-	game(game)
-{
-}
 
 void Stage::update(float delta_time) {
 	if (root)
@@ -34,10 +28,6 @@ void Stage::unload() {
 	
 	if (root)
 		root.unload_ref();
-}
-
-Game* Stage::getGame() {
-	return game;
 }
 
 GameObject* Stage::getRoot() {

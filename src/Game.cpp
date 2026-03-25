@@ -3,53 +3,35 @@
 #include "Game.hpp"
 #include "Stage.hpp"
 #include "AppIO.hpp"
-#include <algorithm>
-#include <memory>
 
 using namespace engine;
-using std::shared_ptr;
-using std::find;
 
-Game::Game() :
-	quit_requested(false),
-	interface(nullptr)
-{
-}
+bool Game::quit_requested = false;
+Ref<Stage> Game::loaded_stage;
+
 
 void Game::requestQuit() {
 	quit_requested = true;
 }
 
 bool Game::shouldQuit() {
-	return
-		// Check if interface has requested to stop the game
-		(interface && interface->shouldClose()) ||
-
-		// Check if game logic requested stop
+	return (
+		AppIO::shouldClose() ||
 		quit_requested
-	;
+	);
 }
 
-shared_ptr<AppIO> Game::getInterface() {
-	return interface;
+void Game::loadStage(Ref<Stage> s) {
+	loaded_stage = s;
+	loaded_stage.load_ref();
 }
 
-void Game::loadStage(Ref<Stage> stage) {
-	loaded_stages.push_back(stage);
-	// TODO error if already loaded
-	loaded_stages.back().load_ref();
+void Game::unloadStage() {
+	loaded_stage.unload_ref();
 }
 
-void Game::unloadStage(Ref<Stage> stage) {
-	loaded_stages.erase(find(loaded_stages.begin(), loaded_stages.end(),stage));
-}
-
-const std::list<Ref<Stage>>& Game::getLoadedStages() {
-	return loaded_stages;
-}
-
-void Game::setInterface(shared_ptr<AppIO> interface) {
-	this->interface = interface;
+Ref<Stage> Game::getStage() {
+	return loaded_stage;
 }
 
 void Game::run() {
@@ -63,20 +45,28 @@ void Game::run() {
 }
 
 void Game::mainLoop() {
-	if (interface)
-		interface->update();
+	AppIO::update();
 
-	for (auto stage : loaded_stages) {
-		stage->update(1.0/30.0);
-		stage->render();
+	if (loaded_stage) {
+		loaded_stage->update(1.0/30.0);
+		loaded_stage->render();
 	}
 
-	if (interface)
-		interface->render();
+	AppIO::render();
+}
+
+void Game::init() {
+	AppIO::init();
+
+	if (init_callback)
+		init_callback();
 }
 
 void Game::close() {
-	loaded_stages.clear();	
-	setInterface(nullptr);
+	if (close_callback)
+		close_callback();
+
+	unloadStage();
+	AppIO::close();
 }
 

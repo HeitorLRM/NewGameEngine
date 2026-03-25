@@ -1,8 +1,10 @@
 #include "SDL_AppIO.hpp"
+#include "AppIO.hpp"
 #include "KeyboardInput.hpp"
 #include "SDL_Texture.hpp"
 #include "SDL_keycode.h"
 #include "Texture.hpp"
+#include "Vec2.hpp"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
@@ -19,32 +21,72 @@ using std::runtime_error;
 using std::string;
 using namespace engine;
 
-unsigned SDL::AppIO::instances = 0;
 
-SDL::AppIO::AppIO(const string& windowTitle, const Vec2& windowDimensions) :
-	engine::AppIO(),
-	window(nullptr),
-	renderer(nullptr),
-	mixer(nullptr)
-{
-	if(instances <= 0)
-		initSDL();
+// AppIO -------------------------------------------------------------
 
-	instances++;
+KeyboardInput AppIO::keyboard;
 
-	init(windowTitle, windowDimensions);
+bool AppIO::shouldClose() {
+	SDL_PumpEvents();
+	return SDL_PeepEvents(
+		NULL, 
+		0, 
+		SDL_PEEKEVENT, 
+		SDL_EVENT_QUIT, 
+		SDL_EVENT_QUIT
+	) > 0;
 }
 
-SDL::AppIO::~AppIO() {
-	close();
+void AppIO::init() {
+	SDL::initSDL();
 
-	instances--;
+	// Initialize mixer
+	SDL::mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+	if (!SDL::mixer)
+		throw runtime_error(SDL_GetError());
 
-	if (instances <= 0)
-		closeSDL();
+	// Initialize window
+	SDL_CreateWindowAndRenderer(
+		SDL::window_title.c_str(), 
+		SDL::window_dimensions.x, 
+		SDL::window_dimensions.y, 
+		0, 
+		&SDL::window, 
+		&SDL::renderer
+	);
+
+	SDL_SetRenderVSync(SDL::renderer, 1); // TODO add frame cap option
 }
 
-void SDL::AppIO::initSDL() {
+void AppIO::close() {
+	// Close window
+	SDL_DestroyRenderer(SDL::renderer);
+	SDL::renderer = nullptr;
+	SDL_DestroyWindow(SDL::window);
+	SDL::window = nullptr;
+
+	// Close mixer
+	MIX_DestroyMixer(SDL::mixer);
+	SDL::mixer = nullptr;
+}
+
+void AppIO::update() {
+	SDL::updateKeyboard();
+}
+
+void AppIO::render() {
+	if (SDL::renderer)
+		SDL_RenderPresent(SDL::renderer);
+}
+
+// AppIO::SDL -------------------------------------------------------------
+
+SDL_Window* AppIO::SDL::window = nullptr;
+SDL_Renderer* AppIO::SDL::renderer = nullptr;
+MIX_Mixer* AppIO::SDL::mixer = nullptr;
+
+
+void AppIO::SDL::initSDL() {
 	bool initialized;
 	// Initialize SDL
 	initialized = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -62,7 +104,7 @@ void SDL::AppIO::initSDL() {
 		throw runtime_error(SDL_GetError());
 }
 
-void SDL::AppIO::closeSDL() {
+void AppIO::SDL::closeSDL() {
 	// Close ttf
 	TTF_Quit();
 
@@ -73,23 +115,9 @@ void SDL::AppIO::closeSDL() {
 	SDL_Quit();
 }
 
-
-bool SDL::AppIO::shouldClose() {
-	SDL_PumpEvents();
-	return SDL_PeepEvents(
-		NULL, 
-		0, 
-		SDL_PEEKEVENT, 
-		SDL_EVENT_QUIT, 
-		SDL_EVENT_QUIT
-	) > 0;
-}
-
-
-
-void SDL::AppIO::updateKeyboard() {
+void AppIO::SDL::updateKeyboard() {
 	SDL_Event event;
-	KeyboardState new_state = keyboard.getState();
+	KeyboardState new_state = AppIO::keyboard.getState();
 	SDL_PumpEvents();
 	while (
 		SDL_PeepEvents(
@@ -159,61 +187,11 @@ void SDL::AppIO::updateKeyboard() {
 		SDL_PumpEvents();
 	}
 	
-	keyboard.update(new_state);
+	AppIO::keyboard.update(new_state);
 }
 
-void SDL::AppIO::update() {
-	updateKeyboard();
-}
-
-void SDL::AppIO::render() {
-	if (renderer)
-		SDL_RenderPresent(renderer);
-}
-
-SDL_Window* SDL::AppIO::getWindow() {
-	return window;
-}
-
-SDL_Renderer* SDL::AppIO::getRenderer() {
-	return renderer;
-}
-
-Ref<engine::Texture> SDL::AppIO::loadTextureFromFile(const std::string& filepath) {
-	SDL::Texture* texture = new SDL::Texture(this);
+Ref<engine::Texture> AppIO::SDL::loadTextureFromFile(const std::string& filepath) {
+	engine::SDL::Texture* texture = new engine::SDL::Texture();
 	texture->load_path = filepath;
 	return Ref<engine::Texture>(texture);
-}
-
-void SDL::AppIO::init(
-	const string& windowTitle,
-	const Vec2& windowDimensions
-) {
-	// Initialize mixer
-	mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
-	if (!mixer)
-		throw runtime_error(SDL_GetError());
-
-	// Initialize window
-	SDL_CreateWindowAndRenderer(
-		windowTitle.c_str(), 
-		windowDimensions.x, 
-		windowDimensions.y, 
-		0, 
-		&window, 
-		&renderer
-	);
-	SDL_SetRenderVSync(renderer, 1); // TODO add frame cap option
-}
-
-void SDL::AppIO::close() {
-	// Close window
-	SDL_DestroyRenderer(renderer);
-	renderer = nullptr;
-	SDL_DestroyWindow(window);
-	window = nullptr;
-
-	// Close mixer
-	MIX_DestroyMixer(mixer);
-	mixer = nullptr;
 }

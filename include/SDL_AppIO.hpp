@@ -1,15 +1,34 @@
 #pragma once
 
-#include "AppIO.hpp"
+#include "Texture.hpp"
 #include "Vec2.hpp"
+#include "Ref.hpp"
+
+#include <string>
 
 class SDL_Window;
 class SDL_Renderer;
 class SDL_Texture;
 class MIX_Mixer;
 
-namespace engine::SDL {
+namespace engine::AppIO::SDL {
 
+extern void initSDL();
+extern void closeSDL();
+extern void updateKeyboard();
+
+extern Ref<engine::Texture> loadTextureFromFile(const std::string& file);
+
+extern std::string window_title;
+extern Vec2 window_dimensions;
+
+extern SDL_Window* window;
+extern SDL_Renderer* renderer;
+extern MIX_Mixer* mixer;
+
+
+
+/*
 class AppIO final : public engine::AppIO {
 // Static
 private:
@@ -40,11 +59,8 @@ private:
 	void close();
 	void updateKeyboard();
 
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	MIX_Mixer* mixer;
 
 
 };
-
+*/
 }

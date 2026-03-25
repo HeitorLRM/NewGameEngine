@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Game.hpp"
-#include "KeyboardInput.hpp"
 #include "Ref.hpp"
 #include <list>
 namespace engine {
@@ -25,9 +24,6 @@ public:
 
 	GameObject* getParent();
 	virtual void setParent(GameObject*);
-
-	Game* getGame() const;
-	const KeyboardInput* getKeyboardInput() const;
 
 	void addChild(Ref<GameObject>);
 	void addChild(Ref<GameObject>, unsigned index);
