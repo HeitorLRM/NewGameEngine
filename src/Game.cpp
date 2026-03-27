@@ -1,13 +1,13 @@
 // TDOO ownership: Heitor
 
 #include "Game.hpp"
-#include "Stage.hpp"
 #include "AppIO.hpp"
+#include "GameObject.hpp"
 
 using namespace engine;
 
 bool Game::quit_requested = false;
-Ref<Stage> Game::loaded_stage;
+Ref<GameObject> Game::root;
 
 
 void Game::requestQuit() {
@@ -21,17 +21,21 @@ bool Game::shouldQuit() {
 	);
 }
 
-void Game::loadStage(Ref<Stage> s) {
-	loaded_stage = s;
-	loaded_stage.load_ref();
+void Game::loadRoot(Ref<GameObject> r) {
+	if (root)
+		unloadRoot();
+
+	root = r;
+
+	root.load_ref();
 }
 
-void Game::unloadStage() {
-	loaded_stage.unload_ref();
+void Game::unloadRoot() {
+	root.unload_ref();
 }
 
-Ref<Stage> Game::getStage() {
-	return loaded_stage;
+Ref<GameObject> Game::getRoot() {
+	return root;
 }
 
 void Game::run() {
@@ -47,9 +51,9 @@ void Game::run() {
 void Game::mainLoop() {
 	AppIO::update();
 
-	if (loaded_stage) {
-		loaded_stage->update(1.0/30.0);
-		loaded_stage->render();
+	if (root) {
+		root->update(1.0/30.0);
+		root->render();
 	}
 
 	AppIO::render();
@@ -66,7 +70,7 @@ void Game::close() {
 	if (close_callback)
 		close_callback();
 
-	unloadStage();
+	unloadRoot();
 	AppIO::close();
 }
 

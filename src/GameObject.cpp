@@ -3,7 +3,6 @@
 #include "GameObject.hpp"
 #include "Game.hpp"
 #include "Ref.hpp"
-#include "Stage.hpp"
 #include <iterator>
 
 using namespace engine;

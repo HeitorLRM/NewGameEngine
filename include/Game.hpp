@@ -5,7 +5,7 @@
 #include "Ref.hpp"
 namespace engine {
 
-class Stage;
+class GameObject;
 
 class Game {
 public:
@@ -14,9 +14,9 @@ public:
 	static void run();
 	static void requestQuit();
 	
-	static void loadStage(Ref<Stage>);
-	static void unloadStage();
-	static Ref<Stage> getStage();
+	static void loadRoot(Ref<GameObject>);
+	static void unloadRoot();
+	static Ref<GameObject> getRoot();
 
 private:
 	static void init();
@@ -31,7 +31,7 @@ public:
 
 private:
 	static bool quit_requested;
-	static Ref<Stage> loaded_stage;
+	static Ref<GameObject> root;
 };
 
 }
