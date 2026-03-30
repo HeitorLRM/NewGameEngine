@@ -18,7 +18,7 @@ public:
 
 private:
 	SDL_Texture* sdl_texture;
-	
+	friend engine::Texture;
 };
 
 }

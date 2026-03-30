@@ -1,9 +1,7 @@
 #include "SDL_AppIO.hpp"
 #include "AppIO.hpp"
 #include "KeyboardInput.hpp"
-#include "SDL_Texture.hpp"
 #include "SDL_keycode.h"
-#include "Texture.hpp"
 #include "Vec2.hpp"
 
 #include <SDL3/SDL.h>
@@ -190,8 +188,3 @@ void AppIO::SDL::updateKeyboard() {
 	AppIO::keyboard.update(new_state);
 }
 
-Ref<engine::Texture> AppIO::SDL::loadTextureFromFile(const std::string& filepath) {
-	engine::SDL::Texture* texture = new engine::SDL::Texture();
-	texture->load_path = filepath;
-	return Ref<engine::Texture>(texture);
-}

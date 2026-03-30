@@ -77,6 +77,13 @@ void GameObject::removeChild(GameObject* child) {
 	children.erase(it);
 }
 
+Ref<GameObject> GameObject::getChild(GameObject* obj_ptr) {
+	for (auto& child : children)
+		if (child.get() == obj_ptr)
+			return child;
+	return Ref<GameObject>();
+}
+
 list<Ref<GameObject>>& GameObject::getChildren() {
 	return children;
 }
@@ -87,10 +94,17 @@ void GameObject::update(float delta_time) {
 	}
 }
 
+void GameObject::pre_render() {
+	auto pass = Game::getRenderPass();
+	if (!pass) return;
+
+	pass->queue(this);
+
+	for (auto& child : children)
+		child->pre_render();
+}
+
 void GameObject::render() {
-	for (auto& child : children) {
-		child->render();
-	}
 }
 
 void GameObject::load() {

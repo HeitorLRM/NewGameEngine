@@ -2,10 +2,12 @@
 
 #pragma once
 
+#include "RenderPass.hpp"
 #include "Ref.hpp"
 namespace engine {
 
 class GameObject;
+class CameraFeed;
 
 class Game {
 public:
@@ -17,6 +19,8 @@ public:
 	static void loadRoot(Ref<GameObject>);
 	static void unloadRoot();
 	static Ref<GameObject> getRoot();
+	static void registerPass(Camera*);
+	static RenderPass* getRenderPass();
 
 private:
 	static void init();
@@ -29,7 +33,10 @@ public:
 	static void (*init_callback)();
 	static void (*close_callback)();
 
+	static Ref<CameraFeed> window_feed;
+
 private:
+	static std::queue<RenderPass> render_passes;
 	static bool quit_requested;
 	static Ref<GameObject> root;
 };

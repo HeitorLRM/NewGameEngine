@@ -1,7 +1,11 @@
-FPS manager
-audio
+print res
+self referencing
+decimate appio
+rework ref shared_ptr
 z-sorting
 camera 2D
+FPS manager
+audio
 object 3D
 sprite 3D
 camera 3D

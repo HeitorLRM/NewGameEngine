@@ -17,6 +17,7 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void update(float delta_time);
+	virtual void pre_render();
 	virtual void render();
 
 	Stage* getStage();
@@ -28,6 +29,7 @@ public:
 	void addChild(Ref<GameObject>);
 	void addChild(Ref<GameObject>, unsigned index);
 	void removeChild(GameObject*);
+	Ref<GameObject> getChild(GameObject*);
 	std::list<Ref<GameObject>>& getChildren();
 
 private:

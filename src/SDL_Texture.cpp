@@ -1,4 +1,5 @@
 #include "SDL_Texture.hpp"
+#include "Ref.hpp"
 #include "SDL_AppIO.hpp"
 #include "Texture.hpp"
 
@@ -21,9 +22,10 @@ void Texture::unload() {
 	Resource::unload();
 }
 
-Ref<Texture> engine::Texture::fromFile(const string& filename) {
-	auto ret = AppIO::SDL::loadTextureFromFile(filename);
-	return ret;
+Ref<Texture> engine::Texture::fromFile(const string& filepath) {
+	engine::SDL::Texture* texture = new engine::SDL::Texture();
+	texture->load_path = filepath;
+	return Ref<engine::Texture>(texture);
 }
 
 // SDL::Texture -----------------------------------------

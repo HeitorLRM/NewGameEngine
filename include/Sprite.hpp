@@ -8,7 +8,6 @@
 #include "Texture.hpp"
 #include "Vec2.hpp"
 
-#include <string>
 #include <vector>
 
 namespace engine {
@@ -31,10 +30,12 @@ protected:
 	void loadTexture();
 	void unloadTexture();
 
+public:
+	int z_index = 0;
+
 protected:
 	Rect clip;
 
-	std::string load_path;
 	Ref<Texture> texture;
 };
 

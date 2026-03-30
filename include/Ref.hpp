@@ -21,6 +21,10 @@ public:
 		std::enable_if_t<std::is_convertible_v<U*, T*>, int> = 0
 	);
 
+	template<typename U>
+	Ref<U> d_cast();
+
+
 	int ref_count();
 	int load_count();
 
@@ -74,6 +78,16 @@ Ref<T>::Ref(
 ) {
 	hold(other.control);
 }
+
+template<typename T>
+template<typename U>
+Ref<U> Ref<T>::d_cast() {
+	U* cast = dynamic_cast<U*>(control->resource);
+	if (!cast)
+		return Ref<U>();
+	return Ref<U>(cast);
+}
+
 
 template<typename T>
 Ref<T>::~Ref() {
