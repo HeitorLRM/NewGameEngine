@@ -1,7 +1,7 @@
-print res
 self referencing
 call super
 decimate appio
+call game from /bin and find files correct path
 rework ref shared_ptr
 camera 2D
 FPS manager

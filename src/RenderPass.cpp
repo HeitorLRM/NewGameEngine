@@ -25,6 +25,17 @@ void RenderPass::flush() {
 	if (!feed) return;
 
 	SDL_SetRenderTarget(AppIO::SDL::renderer, feed->output);
+
+	SDL_SetRenderDrawColor(
+		AppIO::SDL::renderer, 
+		feed->fill_color.r * 255, 
+		feed->fill_color.g * 255, 
+		feed->fill_color.b * 255, 
+		feed->fill_color.a * 255
+	);
+	SDL_RenderClear(AppIO::SDL::renderer);
+
+
 	while (!render_queue.empty()) {	
 		auto obj = render_queue.top().obj;
 		render_queue.pop();

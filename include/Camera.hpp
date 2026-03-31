@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Color.hpp"
 #include "Game.hpp"
 #include "Object2D.hpp"
 #include "Rect.hpp"
@@ -21,6 +22,7 @@ public:
 
 public:
 	Rect screen_area;
+	Color fill_color;
 
 private:
 	SDL_Texture* output;
