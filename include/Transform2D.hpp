@@ -15,6 +15,7 @@ public:
 	void scale(float s);
 
 	Transform2D operator*(const Transform2D&) const;
+	Vec2 operator*(const Vec2&) const;
 
 public:
 	union {

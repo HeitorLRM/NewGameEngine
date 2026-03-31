@@ -75,10 +75,10 @@ void Game::mainLoop() {
 
 	if (root) {
 		root->update(1.0/30.0);
-		root->pre_render();
 	}
 
 	while(auto pass = getRenderPass()) {
+		root->pre_render();
 		pass->flush();
 		render_passes.pop();
 	}

@@ -1,8 +1,10 @@
+#include "Matrix3.hpp"
 #include "Object2D.hpp"
 #include "SDL_AppIO.hpp"
 #include "Camera.hpp"
 #include "Game.hpp"
 #include "Resource.hpp"
+#include "Transform2D.hpp"
 
 #include <SDL3/SDL_render.h>
 
@@ -51,3 +53,16 @@ void Camera::update(float dt) {
 	Game::registerPass(this);
 }
 
+void Camera::mark_global_transform_dirty() {
+	is_inv_global_dirty = true;
+	Object2D::mark_global_transform_dirty();
+}
+
+const Transform2D& Camera::getInverseGlobal() {
+	if (!is_inv_global_dirty)
+		return inv_global;
+	is_inv_global_dirty = false;
+
+	inv_global = {getGlobalTransform().matrix.inverse()};
+	return inv_global;
+}

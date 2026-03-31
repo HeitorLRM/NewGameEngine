@@ -14,8 +14,8 @@ public:
 	const Transform2D& getGlobalTransform();
 	void setParent(GameObject *) final;
 
-private:
-	void mark_global_transform_dirty();
+protected:
+	virtual void mark_global_transform_dirty();
 
 private:
 	Transform2D transform;

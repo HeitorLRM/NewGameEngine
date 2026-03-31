@@ -6,6 +6,7 @@
 #include "Ref.hpp"
 #include "RenderPass.hpp"
 #include "Resource.hpp"
+#include "Transform2D.hpp"
 
 class SDL_Texture;
 
@@ -31,9 +32,17 @@ public:
 	void unload() override;
 	void update(float) override;
 
+	const Transform2D& getInverseGlobal();
+
 public:
 	Ref<CameraFeed> feed = Game::window_feed;
 	bool is_active = true;
+
+private:
+	void mark_global_transform_dirty() override;
+
+	Transform2D inv_global;
+	bool is_inv_global_dirty = true;
 };
 
 }

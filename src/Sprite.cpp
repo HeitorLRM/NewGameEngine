@@ -1,8 +1,11 @@
 // TODO ownership: Heitor
 
+#include "Camera.hpp"
 #include "Sprite.hpp"
+#include "Game.hpp"
 #include "Object2D.hpp"
 #include "Rect.hpp"
+#include "Transform2D.hpp"
 #include "Vec2.hpp"
 #include "AppIO.hpp"
 #include "Texture.hpp"
@@ -37,6 +40,15 @@ void Sprite::unloadTexture() {
 		texture.unload_ref();
 }
 
+void Sprite::pre_render() {
+	auto pass = Game::getRenderPass();
+	if (!pass) return;
+
+	pass->queue(this);
+
+	Object2D::pre_render();
+}
+
 void Sprite::render() {
 	// call super
 	Object2D::render();
@@ -51,9 +63,10 @@ void Sprite::render() {
 		Vec2{d.x, d.y} - pivot  // Bottom Right
 	};
 
-	const Transform2D& globalTransform = getGlobalTransform();
-	const Vec2& pos = globalTransform.position;
-	const Basis2D& basis = globalTransform.basis;
+	const auto& camera = Game::getRenderPass()->active_camera;
+	const Transform2D viewTransform = camera->getInverseGlobal() * getGlobalTransform();
+	const Vec2 pos = viewTransform.position + camera->feed->screen_area.dimensions/2;
+	const Basis2D& basis = viewTransform.basis;
 
 	for (auto& vertex : vertices) {
 		vertex = vertex.x*basis.i + vertex.y*basis.j;
@@ -91,6 +104,10 @@ void Sprite::setClip(const Rect& clip) {
 
 Rect Sprite::getClip() {
 	return clip;
+}
+
+void Sprite::alignCenter() {
+	pivot = clip.dimensions/2;
 }
 
 

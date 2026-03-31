@@ -26,11 +26,13 @@ project "GameEngine"
         "SDL3_mixer",
         "SDL3_ttf",
     }
+
+    optimize "On"
    
     filter { "configurations:Debug" }
+        linktimeoptimization "On"
         defines { "DEBUG" }
         symbols "On"
 
     filter { "configurations:Release" }
         defines { "NDEBUG" }
-        optimize "On"

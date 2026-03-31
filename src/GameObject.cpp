@@ -95,11 +95,6 @@ void GameObject::update(float delta_time) {
 }
 
 void GameObject::pre_render() {
-	auto pass = Game::getRenderPass();
-	if (!pass) return;
-
-	pass->queue(this);
-
 	for (auto& child : children)
 		child->pre_render();
 }

@@ -16,6 +16,7 @@ class Sprite : public Object2D {
 public:
 	virtual void load() override;
 	virtual void unload() override;
+	virtual void pre_render() override;
 	virtual void render() override;
 	
 	void setTexture(Ref<Texture> texture);
@@ -23,6 +24,8 @@ public:
 
 	void setClip(const Rect& clip);
 	virtual Rect getClip();
+
+	void alignCenter();
 
 	Vec2 pivot{0.0, 0.0};
 

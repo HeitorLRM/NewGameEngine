@@ -2,6 +2,7 @@
 #include "Ref.hpp"
 #include "SDL_AppIO.hpp"
 #include "Texture.hpp"
+#include "Vec2.hpp"
 
 #include <SDL3/SDL_render.h>
 #include <SDL3_image/SDL_image.h>
@@ -23,6 +24,7 @@ void Texture::unload() {
 }
 
 Ref<Texture> engine::Texture::fromFile(const string& filepath) {
+	// TODO: figure out dimensions without loading
 	engine::SDL::Texture* texture = new engine::SDL::Texture();
 	texture->load_path = filepath;
 	return Ref<engine::Texture>(texture);
@@ -84,13 +86,14 @@ void SDL::Texture::render(const Rect& clip, const Rect& dst) {
 
 void SDL::Texture::renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) {
 	SDL_Vertex vertices_sdl[4];
-
 	// Populate vertices
-	for (unsigned i = 0; i < 4; i++) vertices_sdl[i] = {
-		vertices[i].x, vertices[i].y,
-		1.0, 1.0, 1.0, 1.0,
-		uvs[i].x, uvs[i].y
-	};
+	for (unsigned i = 0; i < 4; i++) {
+		vertices_sdl[i] = {
+			vertices[i].x, vertices[i].y,
+			1.0, 1.0, 1.0, 1.0,
+			uvs[i].x, uvs[i].y
+		};
+	}
 	const int indices[6] = {0, 1, 2, 2, 1, 3};
 
 	SDL_RenderGeometry(

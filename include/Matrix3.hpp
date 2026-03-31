@@ -8,8 +8,11 @@ class Matrix3 {
 public:
 	static const Matrix3 IDENTITY;
 
+	Matrix3 inverse() const;
 	Matrix3 transposed() const;
 	Matrix3 operator*(const Matrix3&) const;
+	Matrix3 operator*(float) const;
+	Vec3 operator*(const Vec3&) const;
 
 public:
 	// ATTENTION: values are to be stored sequentially by columns.
