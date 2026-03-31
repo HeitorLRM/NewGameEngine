@@ -9,6 +9,8 @@ namespace engine {
 
 class Object2D : public GameObject {
 public:
+	virtual const std::string& getResourceType() const override;
+
 	Transform2D& getTransform();
 	const Transform2D& getTransform() const;
 	const Transform2D& getGlobalTransform();

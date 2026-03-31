@@ -14,6 +14,8 @@ namespace engine {
 
 class CameraFeed : public Resource {
 public:
+	virtual const std::string& getResourceType() const override;
+
 	void load() override;
 	void unload() override;
 
@@ -28,6 +30,8 @@ private:
 
 class Camera : public Object2D {
 public:
+	virtual const std::string& getResourceType() const override;
+
 	void load() override;
 	void unload() override;
 	void update(float) override;

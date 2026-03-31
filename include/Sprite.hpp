@@ -14,6 +14,8 @@ namespace engine {
 
 class Sprite : public Object2D {
 public:
+	virtual const std::string& getResourceType() const override;
+
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void pre_render() override;

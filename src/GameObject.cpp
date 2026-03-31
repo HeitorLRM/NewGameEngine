@@ -9,21 +9,9 @@ using namespace engine;
 
 using std::list;
 
-GameObject::GameObject() :
-	stage(nullptr),
-	parent(nullptr)
-{
-}
-
-void GameObject::setStage(Stage* stage) {
-	this->stage = stage;
-
-	for (auto& child : children)
-		child->setStage(stage);
-}
-
-Stage* GameObject::getStage() {
-	return stage;
+const std::string& GameObject::getResourceType() const {
+	static const std::string RES_NAME = "GameObject";
+	return RES_NAME;
 }
 
 void GameObject::setParent(GameObject* parent) {
@@ -35,9 +23,6 @@ void GameObject::setParent(GameObject* parent) {
 		this->parent->removeChild(this);
 	
 	this->parent = parent;
-
-	if (parent)
-		setStage(parent->getStage());
 }
 
 GameObject* GameObject::getParent() {

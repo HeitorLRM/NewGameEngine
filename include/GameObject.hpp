@@ -7,21 +7,15 @@
 #include <list>
 namespace engine {
 
-class Stage;
 class GameObject : public Resource {
 public:
-	GameObject();
-
-	virtual ~GameObject() = default;
+	virtual const std::string& getResourceType() const override;
 
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void update(float delta_time);
 	virtual void pre_render();
 	virtual void render();
-
-	Stage* getStage();
-	void setStage(Stage*);
 
 	GameObject* getParent();
 	virtual void setParent(GameObject*);
@@ -35,8 +29,7 @@ public:
 private:
 	std::list<Ref<GameObject>> children;
 
-	Stage* stage;
-	GameObject* parent;
+	GameObject* parent = nullptr;
 };
 
 }

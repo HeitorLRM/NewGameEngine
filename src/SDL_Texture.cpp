@@ -15,6 +15,11 @@ using std::string;
 
 // Texture -----------------------------------------
 
+const std::string& Texture::getResourceType() const {
+	static const std::string RES_NAME = "Texture";
+	return RES_NAME;
+}
+
 void Texture::load() {
 	Resource::load();
 }

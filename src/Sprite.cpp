@@ -16,6 +16,11 @@ using namespace engine;
 using std::string;
 using std::vector;
 
+const std::string& Sprite::getResourceType() const {
+	static const std::string RES_NAME = "Sprite";
+	return RES_NAME;
+}
+
 void Sprite::load() {
 	Object2D::load();
 	

@@ -7,10 +7,17 @@
 #include "Transform2D.hpp"
 
 #include <SDL3/SDL_render.h>
+#include <string>
 
 using namespace engine;
 
 // CameraFeed --------------------------------------
+
+const std::string& CameraFeed::getResourceType() const {
+	static const std::string RES_NAME = "CameraFeed";
+	return RES_NAME;
+}
+
 
 void CameraFeed::load() {
 	Resource::load();
@@ -31,6 +38,11 @@ void CameraFeed::unload() {
 }
 
 // Camera ------------------------------------------
+
+const std::string& Camera::getResourceType() const {
+	static const std::string RES_NAME = "Camera";
+	return RES_NAME;
+}
 
 void Camera::load() {
 	Object2D::load();

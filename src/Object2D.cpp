@@ -6,6 +6,11 @@
 
 using namespace engine;
 
+const std::string& Object2D::getResourceType() const {
+	static const std::string RES_NAME = "Object2D";
+	return RES_NAME;
+}
+
 Transform2D& Object2D::getTransform() {
 	mark_global_transform_dirty();
 	return transform;

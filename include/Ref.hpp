@@ -2,6 +2,7 @@
 
 #include "Resource.hpp"
 
+#include <ostream>
 #include <type_traits>
 
 namespace engine {
@@ -180,4 +181,12 @@ void Ref<T>::hold(RefCtrl* new_ctrl) {
 	control->ref_count++;
 }
 
+}
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const engine::Ref<T>& r) {
+	if (!r)
+		return os << "none";
+	
+	return os << *r.get();
 }

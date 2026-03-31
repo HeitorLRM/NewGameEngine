@@ -11,6 +11,8 @@ namespace engine {
 
 class Texture : public Resource {
 public:
+	virtual const std::string& getResourceType() const override;
+
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void render(const Rect& clip, const Rect& dst) = 0;
