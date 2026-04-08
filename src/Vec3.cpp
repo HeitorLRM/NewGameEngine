@@ -2,6 +2,7 @@
 
 #include "Vec3.hpp"
 #include "Math.hpp"
+#include "Quat.hpp"
 #include <ostream>
 
 using namespace engine;
@@ -17,7 +18,8 @@ const Vec3 Vec3::BACK    { 0, 0, 1};
 bool Vec3::operator==(const Vec3& v) const {
 	return
 		eps_equal(x, v.x) &&
-		eps_equal(y, v.y)
+		eps_equal(y, v.y) &&
+		eps_equal(z, v.z)
 	;
 }
 
@@ -178,10 +180,9 @@ Vec3 Vec3::normalized() const {
 	return *this / len();
 }
 
-/* TODO: implement and use quaternions
 Vec3 Vec3::rotated(const Vec3& axis, float angle) const {
+	return Quat::Qrotation(axis, angle) * (*this);
 }
-*/
 
 Vec3 Vec3::reflected(const Vec3& normal) const {
 	return *this - 2 * dot(normal) * normal;

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Color.hpp"
 #include "Game.hpp"
 #include "Object2D.hpp"
 #include "Rect.hpp"
@@ -8,6 +7,7 @@
 #include "RenderPass.hpp"
 #include "Resource.hpp"
 #include "Transform2D.hpp"
+#include "Color.hpp"
 
 class SDL_Texture;
 

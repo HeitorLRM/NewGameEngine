@@ -84,9 +84,11 @@ template<typename T>
 template<typename U>
 Ref<U> Ref<T>::d_cast() {
 	U* cast = dynamic_cast<U*>(control->resource);
+	Ref<U> ret;
 	if (!cast)
-		return Ref<U>();
-	return Ref<U>(cast);
+		return ret;
+	ret.hold(control);
+	return ret;
 }
 
 

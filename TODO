@@ -3,9 +3,9 @@ call super
 decimate appio
 call game from /bin and find files correct path
 rework ref shared_ptr
-camera 2D
 FPS manager
 audio
+vector default zero
 object 3D
 sprite 3D
 camera 3D

@@ -15,6 +15,7 @@ Matrix3 Matrix3::inverse() const {
 		a[1] * (a[3] * a[8] - a[5] * a[6]) +
 		a[2] * (a[3] * a[7] - a[4] * a[6])
 	);
+	// TODO: error: det is 0
 	float dinv = 1 / det;
 
 	Matrix3 minv;
