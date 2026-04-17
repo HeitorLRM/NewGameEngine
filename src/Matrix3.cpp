@@ -59,10 +59,11 @@ Matrix3 Matrix3::operator*(float f) const {
 }
 
 Vec3 Matrix3::operator*(const Vec3& v) const {
+	Matrix3 m = transposed();
 	return Vec3{
-		v.dot(x),
-		v.dot(y),
-		v.dot(z)
+		v.dot(m.x),
+		v.dot(m.y),
+		v.dot(m.z)
 	};
 }
 

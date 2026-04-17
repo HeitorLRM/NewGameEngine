@@ -34,6 +34,7 @@ protected:
 	void unloadTexture();
 
 public:
+	float pixel_size = 1.0/64.0;
 	float z_index;
 	bool is_billboard = false;
 

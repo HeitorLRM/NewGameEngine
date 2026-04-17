@@ -1,6 +1,5 @@
 // TODO ownership: Heitor
 
-#include "Basis3D.hpp"
 #include "Camera3D.hpp"
 #include "Camera.hpp"
 #include "Sprite3D.hpp"
@@ -64,9 +63,9 @@ void Sprite3D::render() {
 
 	if (!texture.get()) return;
 
-	constexpr float PIXEL_SIZE = 0.5;
-	const Vec2 D = getClip().dimensions * PIXEL_SIZE;
-	const Vec2 P = pivot * PIXEL_SIZE;
+	// Model space
+	const Vec2 D = getClip().dimensions * pixel_size;
+	const Vec2 P = pivot * pixel_size;
 	const float L = 0.0 - P.x;
 	const float R = D.x - P.x;
 	const float B = 0.0 - P.y;
@@ -78,29 +77,44 @@ void Sprite3D::render() {
 		{R, B, 0}, // Bottom Right
 	};
 
+	// World space
+	const Transform3D to_world = getGlobalTransform();
+	for (auto& vertex : vertices3D) {
+		if (is_billboard) 
+			vertex += to_world.position;
+		else
+			vertex = to_world * vertex;
+	}
+
+	// Camera space
 	const auto& camera = Game::getRenderPass()->active_camera3D;
-	const Transform3D local_transform = camera->getInverseGlobal() * getGlobalTransform();
+	const Transform3D to_camera = camera->getInverseGlobal();
 
 	for (auto& vertex : vertices3D) {
-		if(!is_billboard)
-			vertex = vertex.x*local_transform.basis.i + vertex.y*local_transform.basis.j;
-		vertex += local_transform.position;
+		vertex = to_camera * vertex;
+		if (
+			-vertex.z < camera->near ||
+			-vertex.z > camera->far
+		)	return;
 	}
 
-	const Transform3D clip_transform = Transform3D{camera->getProjectionMatrix()} * local_transform;
+	// Clip space
+	const Transform3D to_clip = Transform3D{camera->getProjectionMatrix()};
 
 	for (auto& vertex : vertices3D) {
-		//Vec4 v4 = clip_transform.matrix * Vec4{vertex.x, vertex.y, vertex.z, 1};
-		//vertex = v4.xyz/v4.w;
+		Vec4 v4 = to_clip.matrix * Vec4{vertex.x, vertex.y, vertex.z, 1};
+		vertex = v4.xyz/v4.w;
 	}
 
+	// Note: screen limits map to [-1, 1] in x,y
+
+	// Screen space
 	const Vec2 feed_offset = camera->feed->screen_area.dimensions/2;
-	Vec2 vertices2D[4] {
-		Vec2{vertices3D[0].x, -vertices3D[0].y} + feed_offset,
-		Vec2{vertices3D[1].x, -vertices3D[1].y} + feed_offset,
-		Vec2{vertices3D[2].x, -vertices3D[2].y} + feed_offset,
-		Vec2{vertices3D[3].x, -vertices3D[3].y} + feed_offset,
-	};
+	Vec2 vertices2D[4];
+	for (int i=0; i<4; i++) {
+		vertices2D[i].x = (1.0f + vertices3D[i].x) * feed_offset.x;
+		vertices2D[i].y = (1.0f - vertices3D[i].y) * feed_offset.y;
+	}
 
 	Vec2 t_d = texture->dimensions;
 	Vec2 uvs[4] {

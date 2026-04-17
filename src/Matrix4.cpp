@@ -76,11 +76,12 @@ Matrix4 Matrix4::operator*(float f) const {
 }
 
 Vec4 Matrix4::operator*(const Vec4& v) const {
+	Matrix4 m = transposed();
 	return Vec4{
-		v.dot(x),
-		v.dot(y),
-		v.dot(z),
-		v.dot(w)
+		v.dot(m.x),
+		v.dot(m.y),
+		v.dot(m.z),
+		v.dot(m.w)
 	};
 }
 
