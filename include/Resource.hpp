@@ -8,6 +8,8 @@ namespace engine {
 
 class Resource {
 public:
+	virtual ~Resource() = default;
+
 	virtual const std::string& getResourceType() const;
 	explicit operator std::string() const;
 
