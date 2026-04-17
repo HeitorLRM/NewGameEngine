@@ -14,8 +14,8 @@ public:
 	void flush();
 
 public:
-	Camera* active_camera2D;
-	Camera3D* active_camera3D;
+	Camera* active_camera2D = nullptr;
+	Camera3D* active_camera3D = nullptr;
 
 private:
 	struct QueueEntry {
