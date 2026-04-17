@@ -27,6 +27,8 @@ project "GameEngine"
         "SDL3_ttf",
     }
 
+    sanitize { "Address", "Fuzzer", "UndefinedBehavior"}
+
     optimize "On"
    
     filter { "configurations:Debug" }
