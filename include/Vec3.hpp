@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Vec2.hpp"
 #include <ostream>
 namespace engine {
 
@@ -48,7 +49,10 @@ public:
 	Vec3 slide(const Vec3&) const;
 
 public: 
-	float x, y, z;
+	union {
+		struct {float x, y, z;};
+		struct {Vec2 xy;};
+	};
 };
 
 }

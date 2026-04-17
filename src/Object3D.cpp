@@ -23,11 +23,11 @@ const Transform3D& Object3D::getGlobalTransform() {
 		return global_transform;
 
 	
-	Object3D* parent2D = dynamic_cast<Object3D*>(getParent());
-	if (!parent2D)
+	Object3D* parent3D = dynamic_cast<Object3D*>(getParent());
+	if (!parent3D)
 		return transform;
 
-	global_transform = parent2D->getGlobalTransform()*transform;
+	global_transform = parent3D->getGlobalTransform()*transform;
 
 	is_global_transform_dirty = false;
 	return global_transform;
@@ -37,9 +37,8 @@ void Object3D::mark_global_transform_dirty() {
 	is_global_transform_dirty = true;
 	
 	for (auto& child : getChildren()) {
-		Object3D* child2D = dynamic_cast<Object3D*>(child.get());
-		if (child2D)
-			child2D->mark_global_transform_dirty();
+		if (Object3D* child3D = dynamic_cast<Object3D*>(child.get()))
+			child3D->mark_global_transform_dirty();
 	}
 }
 

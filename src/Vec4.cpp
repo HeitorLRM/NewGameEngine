@@ -130,7 +130,7 @@ float Vec4::angle_with(const Vec4& v) const {
 }
 
 float Vec4::dot(const Vec4& v) const {
-	return x*v.x + y*v.y + z*v.z + w*v.z;
+	return x*v.x + y*v.y + z*v.z + w*v.w;
 }
 
 Vec4 Vec4::lerp(const Vec4& to, float t) const {
@@ -144,9 +144,4 @@ Vec4 Vec4::normalized() const {
 
 	return *this / len();
 }
-
-/* TODO: implement and use quaternions
-Vec4 Vec4::rotated(const Vec3& axis, float angle) const {
-}
-*/
 

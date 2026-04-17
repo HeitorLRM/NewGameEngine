@@ -49,7 +49,13 @@ Ref<GameObject> Game::getRoot() {
 
 void Game::registerPass(Camera* c) {
 	RenderPass pass;
-	pass.active_camera = c;
+	pass.active_camera2D = c;
+	render_passes.push(pass);
+}
+
+void Game::registerPass(Camera3D* c) {
+	RenderPass pass;
+	pass.active_camera3D = c;
 	render_passes.push(pass);
 }
 

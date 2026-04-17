@@ -5,6 +5,7 @@
 namespace engine {
 
 class Camera;
+class Camera3D;
 class GameObject;
 
 class RenderPass {
@@ -13,7 +14,8 @@ public:
 	void flush();
 
 public:
-	Camera* active_camera;
+	Camera* active_camera2D;
+	Camera3D* active_camera3D;
 
 private:
 	struct QueueEntry {

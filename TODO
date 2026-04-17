@@ -1,12 +1,12 @@
 self referencing
+fix get transform
 call super
 decimate appio
 call game from /bin and find files correct path
 rework ref shared_ptr
 FPS manager
 audio
+timer
+mouse input
 vector default zero
-object 3D
 sprite 3D
-camera 3D
-

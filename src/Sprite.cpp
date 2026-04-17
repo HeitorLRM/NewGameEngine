@@ -5,6 +5,7 @@
 #include "Game.hpp"
 #include "Object2D.hpp"
 #include "Rect.hpp"
+#include "RenderPass.hpp"
 #include "Transform2D.hpp"
 #include "Vec2.hpp"
 #include "AppIO.hpp"
@@ -47,7 +48,7 @@ void Sprite::unloadTexture() {
 
 void Sprite::pre_render() {
 	auto pass = Game::getRenderPass();
-	if (!pass) return;
+	if (!pass || !pass->active_camera2D) return;
 
 	pass->queue(this);
 
@@ -68,7 +69,7 @@ void Sprite::render() {
 		Vec2{d.x, d.y} - pivot  // Bottom Right
 	};
 
-	const auto& camera = Game::getRenderPass()->active_camera;
+	const auto& camera = Game::getRenderPass()->active_camera2D;
 	const Transform2D viewTransform = camera->getInverseGlobal() * getGlobalTransform();
 	const Vec2 pos = viewTransform.position + camera->feed->screen_area.dimensions/2;
 	const Basis2D& basis = viewTransform.basis;
