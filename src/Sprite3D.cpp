@@ -1,5 +1,6 @@
 // TODO ownership: Heitor
 
+#include "Basis3D.hpp"
 #include "Camera3D.hpp"
 #include "Camera.hpp"
 #include "Sprite3D.hpp"
@@ -77,37 +78,31 @@ void Sprite3D::render() {
 		{R, B, 0}, // Bottom Right
 	};
 
-	// World space
+	const auto& camera = Game::getRenderPass()->active_camera3D;
 	const Transform3D to_world = getGlobalTransform();
+	const Transform3D to_camera = camera->getInverseGlobal();
+	const Transform3D camera_global = camera->getGlobalTransform();
+	const Transform3D to_clip = Transform3D{camera->getProjectionMatrix()};
 	for (auto& vertex : vertices3D) {
-		if (is_billboard) 
-			vertex += to_world.position;
+		// World space
+		if (is_billboard) vertex = 
+			vertex.x*camera_global.basis.i + 
+			vertex.y*camera_global.basis.j + 
+			to_world.position
+		; 
 		else
 			vertex = to_world * vertex;
-	}
 
-	// Camera space
-	const auto& camera = Game::getRenderPass()->active_camera3D;
-	const Transform3D to_camera = camera->getInverseGlobal();
-
-	for (auto& vertex : vertices3D) {
+		// Camera space
 		vertex = to_camera * vertex;
-		if (
-			-vertex.z < camera->near ||
-			-vertex.z > camera->far
-		)	return;
-	}
 
-	// Clip space
-	const Transform3D to_clip = Transform3D{camera->getProjectionMatrix()};
-
-	for (auto& vertex : vertices3D) {
-		Vec4 v4 = to_clip.matrix * Vec4{vertex.x, vertex.y, vertex.z, 1};
-		vertex = v4.xyz/v4.w;
-	}
-
-	// Note: screen limits map to [-1, 1] in x,y
-
+		// Clip space
+		Vec4 v_clip = to_clip.matrix * Vec4{vertex.x, vertex.y, vertex.z, 1};
+		
+		// Perspective
+		vertex = v_clip.xyz / v_clip.w;
+		// Note: NDC space maps screen borders to [-1, 1] in x,y
+	} 
 	// Screen space
 	const Vec2 feed_offset = camera->feed->screen_area.dimensions/2;
 	Vec2 vertices2D[4];

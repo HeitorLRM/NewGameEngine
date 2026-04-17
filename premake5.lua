@@ -32,9 +32,9 @@ project "GameEngine"
     optimize "On"
    
     filter { "configurations:Debug" }
-        linktimeoptimization "On"
         defines { "DEBUG" }
         symbols "On"
 
     filter { "configurations:Release" }
+        linktimeoptimization "On"
         defines { "NDEBUG" }
