@@ -2,7 +2,6 @@
 
 #include "Basis3D.hpp"
 #include "Camera3D.hpp"
-#include "Camera.hpp"
 #include "Sprite3D.hpp"
 #include "Game.hpp"
 #include "Rect.hpp"

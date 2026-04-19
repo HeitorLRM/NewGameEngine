@@ -19,7 +19,7 @@ public:
 	static void loadRoot(Ref<GameObject>);
 	static void unloadRoot();
 	static Ref<GameObject> getRoot();
-	static void registerPass(Camera*);
+	static void registerPass(Camera2D*);
 	static void registerPass(Camera3D*);
 	static RenderPass* getRenderPass();
 

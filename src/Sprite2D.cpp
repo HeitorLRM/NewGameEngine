@@ -1,7 +1,8 @@
 // TODO ownership: Heitor
 
-#include "Camera.hpp"
-#include "Sprite.hpp"
+#include "Sprite2D.hpp"
+
+#include "Camera2D.hpp"
 #include "Game.hpp"
 #include "Object2D.hpp"
 #include "Rect.hpp"
@@ -11,42 +12,39 @@
 #include "AppIO.hpp"
 #include "Texture.hpp"
 
-#include <vector>
-
 using namespace engine;
 using std::string;
-using std::vector;
 
-const std::string& Sprite::getResourceType() const {
-	static const std::string RES_NAME = "Sprite";
+const std::string& Sprite2D::getResourceType() const {
+	static const std::string RES_NAME = "Sprite2D";
 	return RES_NAME;
 }
 
-void Sprite::load() {
+void Sprite2D::load() {
 	Object2D::load();
 	
 	loadTexture();
 }
 
-void Sprite::unload() {
+void Sprite2D::unload() {
 	Object2D::unload();
 
 	unloadTexture();
 }
 
-void Sprite::loadTexture() {
+void Sprite2D::loadTexture() {
 	if (texture) {
 		texture.load_ref();
 		clip = {Vec2(), texture->dimensions};
 	}
 }
 
-void Sprite::unloadTexture() {
+void Sprite2D::unloadTexture() {
 	if (texture)
 		texture.unload_ref();
 }
 
-void Sprite::pre_render() {
+void Sprite2D::pre_render() {
 	auto pass = Game::getRenderPass();
 	if (!pass || !pass->active_camera2D) return;
 
@@ -55,7 +53,7 @@ void Sprite::pre_render() {
 	Object2D::pre_render();
 }
 
-void Sprite::render() {
+void Sprite2D::render() {
 	// call super
 	Object2D::render();
 
@@ -69,7 +67,7 @@ void Sprite::render() {
 		Vec2{d.x, d.y} - pivot  // Bottom Right
 	};
 
-	const auto& camera = Game::getRenderPass()->active_camera2D;
+	const auto camera = Game::getRenderPass()->active_camera2D;
 	const Transform2D viewTransform = camera->getInverseGlobal() * getGlobalTransform();
 	const Vec2 pos = viewTransform.position + camera->feed->screen_area.dimensions/2;
 	const Basis2D& basis = viewTransform.basis;
@@ -90,7 +88,7 @@ void Sprite::render() {
 	texture->renderQuad(vertices, uvs);
 }
 
-void Sprite::setTexture(Ref<Texture> texture) {
+void Sprite2D::setTexture(Ref<Texture> texture) {
 	this->texture = texture;
 	
 	if (is_loaded)
@@ -100,38 +98,18 @@ void Sprite::setTexture(Ref<Texture> texture) {
 		clip = {Vec2(), texture->dimensions};
 }
 
-Ref<Texture> Sprite::getTexture() {
+Ref<Texture> Sprite2D::getTexture() {
 	return texture;
 }
 
-void Sprite::setClip(const Rect& clip) {
+void Sprite2D::setClip(const Rect& clip) {
 	this->clip = clip;
 }
 
-Rect Sprite::getClip() {
+Rect Sprite2D::getClip() {
 	return clip;
 }
 
-void Sprite::alignCenter() {
+void Sprite2D::alignCenter() {
 	pivot = clip.dimensions/2;
 }
-
-
-
-void SpriteSheet::setSheet(const std::vector<Rect>& frames) {
-	this->frames = frames;
-}
-
-unsigned SpriteSheet::addFrame(const Rect& frame) {
-	frames.push_back(frame);
-	return frames.size();
-}
-
-Rect& SpriteSheet::getFrame(unsigned index) {
-	return frames[index];
-}
-
-Rect SpriteSheet::getClip() {
-	return getFrame(current_frame);
-}
-

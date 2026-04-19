@@ -4,7 +4,7 @@
 
 namespace engine {
 
-class Camera;
+class Camera2D;
 class Camera3D;
 class GameObject;
 
@@ -14,7 +14,7 @@ public:
 	void flush();
 
 public:
-	Camera* active_camera2D = nullptr;
+	Camera2D* active_camera2D = nullptr;
 	Camera3D* active_camera3D = nullptr;
 
 private:

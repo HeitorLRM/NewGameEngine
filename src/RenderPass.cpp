@@ -1,11 +1,11 @@
-#include "Camera.hpp"
+#include "Camera2D.hpp"
 #include "Camera3D.hpp"
 #include "RenderPass.hpp"
 #include "GameObject.hpp"
 #include "SDL_AppIO.hpp"
 #include "SDL_rect.h"
 #include "SDL_render.h"
-#include "Sprite.hpp"
+#include "Sprite2D.hpp"
 #include "Sprite3D.hpp"
 
 using namespace engine;
@@ -14,7 +14,7 @@ void RenderPass::queue(GameObject* obj) {
 	QueueEntry entry;
 	entry.obj = obj;
 
-	if (auto obj_sprite = dynamic_cast<Sprite*>(obj))
+	if (auto obj_sprite = dynamic_cast<Sprite2D*>(obj))
 		entry.priority = obj_sprite->z_index;
 	else if (auto obj_sprite3D = dynamic_cast<Sprite3D*>(obj))
 		entry.priority = obj_sprite3D->z_index;

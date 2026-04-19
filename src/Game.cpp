@@ -1,7 +1,8 @@
 // TDOO ownership: Heitor
 
+#include "Camera2D.hpp"
+
 #include "Game.hpp"
-#include "Camera.hpp"
 #include "RenderPass.hpp"
 #include "AppIO.hpp"
 #include "SDL_AppIO.hpp"
@@ -47,7 +48,7 @@ Ref<GameObject> Game::getRoot() {
 	return root;
 }
 
-void Game::registerPass(Camera* c) {
+void Game::registerPass(Camera2D* c) {
 	RenderPass pass;
 	pass.active_camera2D = c;
 	render_passes.push(pass);

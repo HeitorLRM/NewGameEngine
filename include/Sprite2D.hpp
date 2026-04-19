@@ -8,11 +8,9 @@
 #include "Texture.hpp"
 #include "Vec2.hpp"
 
-#include <vector>
-
 namespace engine {
 
-class Sprite : public Object2D {
+class Sprite2D : public Object2D {
 public:
 	virtual const std::string& getResourceType() const override;
 
@@ -42,23 +40,6 @@ protected:
 	Rect clip;
 
 	Ref<Texture> texture;
-};
-
-
-class SpriteSheet : public Sprite {
-public:
-	void setSheet(const std::vector<Rect>&);
-	unsigned addFrame(const Rect&);
-	Rect& getFrame(unsigned);
-
-	Rect getClip() override;
-
-public:
-	unsigned current_frame;
-
-protected:
-	std::vector<Rect> frames;
-
 };
 
 }
