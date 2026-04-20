@@ -79,7 +79,7 @@ void Sprite2D::render() {
 		vertex += pos;
 	}
 
-	texture->renderQuad(vertices, getUVs());
+	texture->renderQuad(vertices, getFrameUVs(current_frame));
 }
 
 void Sprite2D::setTexture(Ref<Texture> texture) {
@@ -101,9 +101,9 @@ void Sprite2D::alignCenter() {
 	pivot = getDimensions()/2.0;
 }
 
-array<Vec2, 4> Sprite2D::getUVs() const {
-	unsigned i = current_frame % spritesheet.horizontal_count;
-	unsigned j = current_frame / spritesheet.vertical_count;
+array<Vec2, 4> Sprite2D::getFrameUVs(unsigned frame) const {
+	unsigned i = frame % spritesheet.horizontal_count;
+	unsigned j = frame / spritesheet.vertical_count;
 	Vec2 size = {(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
 	Vec2 d = Vec2{1.0, 1.0} / size;
 	Vec2 origin = Vec2{(float)i,(float)j} / size;

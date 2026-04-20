@@ -51,7 +51,6 @@ void Sprite3D::pre_render() {
 	Transform3D view = pass->active_camera3D->getInverseGlobal()*getGlobalTransform();
 	if (view.position.z > 0)
 		return;
-
 	z_index = -view.position.z;
 
 	pass->queue(this);
@@ -88,8 +87,7 @@ void Sprite3D::render() {
 		if (is_billboard) vertex = 
 			vertex.x*camera_global.basis.i + 
 			vertex.y*camera_global.basis.j + 
-			to_world.position
-		; 
+			to_world.position;
 		else
 			vertex = to_world * vertex;
 
@@ -101,7 +99,11 @@ void Sprite3D::render() {
 		
 		// Perspective
 		vertex = v_clip.xyz / v_clip.w;
-		// Note: NDC space maps screen borders to [-1, 1] in x,y
+		// Note: NDC space maps clip boundaries to [-1, 1] in x,y,z
+
+		// Z-culling
+		if (vertex.z < -1.0)
+			return;
 	} 
 	// Screen space
 	const Vec2 feed_offset = camera->feed->screen_area.dimensions/2;
@@ -111,7 +113,7 @@ void Sprite3D::render() {
 		vertices2D[i].y = (1.0f - vertices3D[i].y) * feed_offset.y;
 	}
 
-	texture->renderQuad(vertices2D, getUVs());
+	texture->renderQuad(vertices2D, getFrameUVs(current_frame));
 }
 
 void Sprite3D::setTexture(Ref<Texture> texture) {
@@ -133,9 +135,9 @@ void Sprite3D::alignCenter() {
 	pivot = getDimensions()/2.0;
 }
 
-array<Vec2, 4> Sprite3D::getUVs() const {
-	unsigned i = current_frame % spritesheet.horizontal_count;
-	unsigned j = current_frame / spritesheet.vertical_count;
+array<Vec2, 4> Sprite3D::getFrameUVs(unsigned frame) const {
+	unsigned i = frame % spritesheet.horizontal_count;
+	unsigned j = frame / spritesheet.vertical_count;
 	Vec2 size = {(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
 	Vec2 d = Vec2{1.0, 1.0} / size;
 	Vec2 origin = Vec2{(float)i,(float)j} / size;

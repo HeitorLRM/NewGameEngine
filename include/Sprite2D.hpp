@@ -27,7 +27,7 @@ public:
 	Vec2 pivot{0.0, 0.0};
 
 protected:
-	virtual std::array<Vec2, 4> getUVs() const;
+	std::array<Vec2, 4> getFrameUVs(unsigned frame) const;
 
 	void loadTexture();
 	void unloadTexture();

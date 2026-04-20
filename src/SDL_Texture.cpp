@@ -1,6 +1,7 @@
 #include "SDL_Texture.hpp"
 #include "Ref.hpp"
 #include "SDL_AppIO.hpp"
+#include "SDL_surface.h"
 #include "Texture.hpp"
 #include "Vec2.hpp"
 
@@ -51,12 +52,17 @@ void SDL::Texture::load() {
 		load_path.c_str()
 	);
 
-	if (sdl_texture != nullptr)
+	if (sdl_texture != nullptr) {
 		SDL_GetTextureSize(
 			sdl_texture, 
 			&dimensions.x, 
 			&dimensions.y
 		);
+		SDL_SetTextureScaleMode(
+			sdl_texture, 
+			SDL_SCALEMODE_NEAREST
+		);
+	}
 }
 
 void SDL::Texture::unload() {
