@@ -12,8 +12,11 @@
 #include "AppIO.hpp"
 #include "Texture.hpp"
 
+#include <array>
+
 using namespace engine;
 using std::string;
+using std::array;
 
 const std::string& Sprite2D::getResourceType() const {
 	static const std::string RES_NAME = "Sprite2D";
@@ -35,7 +38,6 @@ void Sprite2D::unload() {
 void Sprite2D::loadTexture() {
 	if (texture) {
 		texture.load_ref();
-		clip = {Vec2(), texture->dimensions};
 	}
 }
 
@@ -59,8 +61,8 @@ void Sprite2D::render() {
 
 	if (!texture.get()) return;
 	
-	const Vec2& d = getClip().dimensions;
-	Vec2 vertices[4] {
+	const Vec2 d = getDimensions();
+	array<Vec2,4> vertices {
 		Vec2{0.0, 0.0} - pivot, // Top Left
 		Vec2{d.x, 0.0} - pivot, // Top Right
 		Vec2{0.0, d.y} - pivot, // Bottom Left
@@ -77,15 +79,7 @@ void Sprite2D::render() {
 		vertex += pos;
 	}
 
-	Vec2 t_d = texture->dimensions;
-	Vec2 uvs[4] {
-		clip.origin / t_d, // Top Left
-		(clip.origin + Vec2{clip.w, 0.0}) / t_d, // Top Right
-		(clip.origin + Vec2{0.0, clip.h}) / t_d, // Bottom Left
-		clip.getEnd() / t_d // Bottom Right
-	};
-
-	texture->renderQuad(vertices, uvs);
+	texture->renderQuad(vertices, getUVs());
 }
 
 void Sprite2D::setTexture(Ref<Texture> texture) {
@@ -93,23 +87,31 @@ void Sprite2D::setTexture(Ref<Texture> texture) {
 	
 	if (is_loaded)
 		this->texture.load_ref();
-	
-	if (texture.get())
-		clip = {Vec2(), texture->dimensions};
 }
 
 Ref<Texture> Sprite2D::getTexture() {
 	return texture;
 }
 
-void Sprite2D::setClip(const Rect& clip) {
-	this->clip = clip;
-}
-
-Rect Sprite2D::getClip() {
-	return clip;
+Vec2 Sprite2D::getDimensions() const {
+	return texture->dimensions / Vec2{(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
 }
 
 void Sprite2D::alignCenter() {
-	pivot = clip.dimensions/2;
+	pivot = getDimensions()/2.0;
 }
+
+array<Vec2, 4> Sprite2D::getUVs() const {
+	unsigned i = current_frame % spritesheet.horizontal_count;
+	unsigned j = current_frame / spritesheet.vertical_count;
+	Vec2 size = {(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
+	Vec2 d = Vec2{1.0, 1.0} / size;
+	Vec2 origin = Vec2{(float)i,(float)j} / size;
+	return {
+		origin, // Top Left
+		origin + Vec2{d.x,0.0}, // Top Right
+		origin + Vec2{0.0,d.y}, // Bottom Left
+		origin + d // Bottom Right
+	};
+}
+

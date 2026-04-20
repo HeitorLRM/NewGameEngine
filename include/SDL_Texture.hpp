@@ -14,7 +14,7 @@ public:
 	void load() override;
 	void unload() override;
 	void render(const Rect& clip, const Rect& dst) override;
-	void renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) override;
+	void renderQuad(const std::array<Vec2,4>& vertices, const std::array<Vec2,4>& uvs) override;
 
 private:
 	SDL_Texture* sdl_texture;

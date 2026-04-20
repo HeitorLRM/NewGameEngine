@@ -89,7 +89,7 @@ void SDL::Texture::render(const Rect& clip, const Rect& dst) {
 		throw runtime_error("could not render texture."); // TODO error system
 }
 
-void SDL::Texture::renderQuad(const Vec2 (&vertices)[4], const Vec2 (&uvs)[4]) {
+void SDL::Texture::renderQuad(const std::array<Vec2,4>& vertices, const std::array<Vec2,4>& uvs) {
 	SDL_Vertex vertices_sdl[4];
 	// Populate vertices
 	for (unsigned i = 0; i < 4; i++) {

@@ -4,7 +4,6 @@
 
 #include "AppIO.hpp"
 #include "Object2D.hpp"
-#include "Rect.hpp"
 #include "Texture.hpp"
 #include "Vec2.hpp"
 
@@ -21,24 +20,28 @@ public:
 	
 	void setTexture(Ref<Texture> texture);
 	Ref<Texture> getTexture();
-
-	void setClip(const Rect& clip);
-	virtual Rect getClip();
+	Vec2 getDimensions() const;
 
 	void alignCenter();
 
 	Vec2 pivot{0.0, 0.0};
 
 protected:
+	virtual std::array<Vec2, 4> getUVs() const;
+
 	void loadTexture();
 	void unloadTexture();
 
 public:
+	struct {
+		unsigned horizontal_count = 1;
+		unsigned vertical_count = 1;
+	} spritesheet;
+
+	unsigned current_frame = 0;
 	int z_index = 0;
 
 protected:
-	Rect clip;
-
 	Ref<Texture> texture;
 };
 

@@ -11,8 +11,11 @@
 #include "Texture.hpp"
 #include "Vec3.hpp"
 
+#include <array>
+
 using namespace engine;
 using std::string;
+using std::array;
 
 const std::string& Sprite3D::getResourceType() const {
 	static const std::string RES_NAME = "Sprite3D";
@@ -32,10 +35,8 @@ void Sprite3D::unload() {
 }
 
 void Sprite3D::loadTexture() {
-	if (texture) {
+	if (texture)
 		texture.load_ref();
-		clip = {Vec2(), texture->dimensions};
-	}
 }
 
 void Sprite3D::unloadTexture() {
@@ -64,17 +65,17 @@ void Sprite3D::render() {
 	if (!texture.get()) return;
 
 	// Model space
-	const Vec2 D = getClip().dimensions * pixel_size;
+	const Vec2 D = getDimensions() * pixel_size;
 	const Vec2 P = pivot * pixel_size;
 	const float L = 0.0 - P.x;
 	const float R = D.x - P.x;
 	const float B = 0.0 - P.y;
 	const float T = D.y - P.y;
-	Vec3 vertices3D[4] {
-		{L, T, 0}, // Top Left
-		{R, T, 0}, // Top Right
-		{L, B, 0}, // Bottom Left
-		{R, B, 0}, // Bottom Right
+	array<Vec3,4> vertices3D {
+		Vec3{L, T, 0}, // Top Left
+		Vec3{R, T, 0}, // Top Right
+		Vec3{L, B, 0}, // Bottom Left
+		Vec3{R, B, 0}, // Bottom Right
 	};
 
 	const auto& camera = Game::getRenderPass()->active_camera3D;
@@ -104,21 +105,13 @@ void Sprite3D::render() {
 	} 
 	// Screen space
 	const Vec2 feed_offset = camera->feed->screen_area.dimensions/2;
-	Vec2 vertices2D[4];
+	array<Vec2,4> vertices2D;
 	for (int i=0; i<4; i++) {
 		vertices2D[i].x = (1.0f + vertices3D[i].x) * feed_offset.x;
 		vertices2D[i].y = (1.0f - vertices3D[i].y) * feed_offset.y;
 	}
 
-	Vec2 t_d = texture->dimensions;
-	Vec2 uvs[4] {
-		clip.origin / t_d, // Top Left
-		(clip.origin + Vec2{clip.w, 0.0}) / t_d, // Top Right
-		(clip.origin + Vec2{0.0, clip.h}) / t_d, // Bottom Left
-		clip.getEnd() / t_d // Bottom Right
-	};
-
-	texture->renderQuad(vertices2D, uvs);
+	texture->renderQuad(vertices2D, getUVs());
 }
 
 void Sprite3D::setTexture(Ref<Texture> texture) {
@@ -126,24 +119,30 @@ void Sprite3D::setTexture(Ref<Texture> texture) {
 
 	if (is_loaded)
 		this->texture.load_ref();
-
-	if (texture.get())
-		clip = {Vec2(), texture->dimensions};
 }
 
 Ref<Texture> Sprite3D::getTexture() {
 	return texture;
 }
 
-void Sprite3D::setClip(const Rect& clip) {
-	this->clip = clip;
-}
-
-Rect Sprite3D::getClip() {
-	return clip;
+Vec2 Sprite3D::getDimensions() const {
+	return texture->dimensions / Vec2{(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
 }
 
 void Sprite3D::alignCenter() {
-	pivot = clip.dimensions/2;
+	pivot = getDimensions()/2.0;
 }
 
+array<Vec2, 4> Sprite3D::getUVs() const {
+	unsigned i = current_frame % spritesheet.horizontal_count;
+	unsigned j = current_frame / spritesheet.vertical_count;
+	Vec2 size = {(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
+	Vec2 d = Vec2{1.0, 1.0} / size;
+	Vec2 origin = Vec2{(float)i,(float)j} / size;
+	return {
+		origin, // Top Left
+		origin + Vec2{d.x,0.0}, // Top Right
+		origin + Vec2{0.0,d.y}, // Bottom Left
+		origin + d // Bottom Right
+	};
+}
