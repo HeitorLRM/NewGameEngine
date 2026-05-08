@@ -3,8 +3,8 @@
 #include "RenderPass.hpp"
 #include "GameObject.hpp"
 #include "SDL_AppIO.hpp"
-#include "SDL_rect.h"
-#include "SDL_render.h"
+#include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_render.h>
 #include "Sprite2D.hpp"
 #include "Sprite3D.hpp"
 

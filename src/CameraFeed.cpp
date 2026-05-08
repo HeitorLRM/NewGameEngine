@@ -1,6 +1,6 @@
 #include "CameraFeed.hpp"
 #include "SDL_AppIO.hpp"
-#include "SDL_render.h"
+#include <SDL3/SDL_render.h>
 
 using namespace engine;
 
