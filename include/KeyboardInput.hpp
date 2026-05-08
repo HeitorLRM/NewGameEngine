@@ -63,20 +63,16 @@ public:
 
 class KeyboardInput {
 public:
-	void update(const KeyboardState& new_curr);
+	void update();
 
-	const KeyboardState& isKeyDown() const;
-	const KeyboardState& isKeyJustPressed() const;
-	const KeyboardState& isKeyJustReleased() const;
-
-	const KeyboardState& getState() const;
+	KeyboardState isKeyDown() const;
+	KeyboardState isKeyJustPressed() const;
+	KeyboardState isKeyJustReleased() const;
 
 
 private:
 	KeyboardState keyboard_prev;
 	KeyboardState keyboard_curr;
-	KeyboardState keyboard_just_pressed;
-	KeyboardState keyboard_just_released;
 };
 
 }

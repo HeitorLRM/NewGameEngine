@@ -3,6 +3,7 @@
 #pragma once
 
 #include "KeyboardInput.hpp"
+#include "MouseInput.hpp"
 
 namespace engine {
 
@@ -17,6 +18,7 @@ extern void render();
 extern bool shouldClose();
 
 extern KeyboardInput keyboard;
+extern MouseInput mouse;
 
 };
 

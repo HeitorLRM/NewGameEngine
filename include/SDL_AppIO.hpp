@@ -13,7 +13,6 @@ namespace engine::AppIO::SDL {
 
 extern void initSDL();
 extern void closeSDL();
-extern void updateKeyboard();
 
 extern const std::string window_title;
 extern const Vec2 window_dimensions;
