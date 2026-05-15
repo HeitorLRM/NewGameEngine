@@ -26,6 +26,28 @@ Quat Quat::normalized() const {
 	return {xyzw.normalized()};
 }
 
+/*
+Basis3D Quat::toRotationBasis() {
+	return {
+		// i
+		1.0f - 2.0f*(y*y + z*z),
+		2.0f * (x*y + w*z),
+		2.0f * (x*z - w*y),
+		0,
+		// j
+		2.0f * (x*y - w*z),
+		1.0f - 2.0f * (x*x + z*z),
+		2.0f * (y*z + w*x),
+		0,
+		// k
+		2.0f * (x*z + w*y),
+		2.0f * (y*z - w*x),
+		1.0f - 2.0f * (x*x + y*y),
+		0
+	};
+}
+*/
+
 Quat Quat::operator*(const Quat& q) const {
 	return {
 		w*q.x + x*q.w + y*q.z - z*q.y,

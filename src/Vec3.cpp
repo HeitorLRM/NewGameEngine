@@ -143,7 +143,7 @@ float Vec3::dot(const Vec3& v) const {
 Vec3 Vec3::cross(const Vec3& v) const {
 	return {
 		y*v.z - z*v.y,
-		x*v.z - z*v.x,
+		z*v.x - x*v.z,
 		x*v.y - y*v.x
 	};
 }
