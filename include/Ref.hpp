@@ -7,8 +7,6 @@
 
 namespace engine {
 
-class RefCtrl;
-
 template<typename T>
 class Ref {
 public:
@@ -25,10 +23,6 @@ public:
 	template<typename U>
 	Ref<U> d_cast();
 
-
-	int ref_count();
-	int load_count();
-
 	void load_ref();
 	void unload_ref();
 	void release();
@@ -41,13 +35,11 @@ public:
 	operator bool() const;
 
 private:
-	void hold(RefCtrl* new_ctrl);
-
-public:
+	void hold(Resource* new_resource);
 	bool has_loaded = false;
 
 private:
-	RefCtrl* control = nullptr;
+	Resource* resource = nullptr;
 
 	template<typename> friend class Ref;
 	friend Resource;
@@ -62,13 +54,12 @@ Ref<T>::Ref(T* resource) {
 		std::is_base_of_v<Resource, T> == true, 
 		"Type must inherit Resource."
 	);
-	RefCtrl* new_ctrl = new RefCtrl{resource};
-	hold(new_ctrl);
+	hold(resource);
 }
 
 template<typename T>
 Ref<T>::Ref(const Ref& other) {
-	hold(other.control);
+	hold(other.resource);
 }
 
 template<typename T>
@@ -77,17 +68,17 @@ Ref<T>::Ref(
 	const Ref<U>& other, 
 	std::enable_if_t<std::is_convertible_v<U*, T*>, int>
 ) {
-	hold(other.control);
+	hold(other.resource);
 }
 
 template<typename T>
 template<typename U>
 Ref<U> Ref<T>::d_cast() {
-	U* cast = dynamic_cast<U*>(control->resource);
+	U* cast = dynamic_cast<U*>(resource);
 	Ref<U> ret;
 	if (!cast)
 		return ret;
-	ret.hold(control);
+	ret.hold(resource);
 	return ret;
 }
 
@@ -98,60 +89,50 @@ Ref<T>::~Ref() {
 }
 
 template<typename T>
-int Ref<T>::ref_count() {
-	return control->ref_count;
-}
-
-template<typename T>
-int Ref<T>::load_count() {
-	return control->load_count;
-}
-
-template<typename T>
 void Ref<T>::load_ref() {
-	if (has_loaded || !control)	return;
+	if (has_loaded || !resource) return;
 
 	has_loaded = true;
 
-	if(control->load_count++ <= 0) {
-		control->load_res();
+	if (resource->load_count++ <= 0) {
+		resource->load();
 	}
 }
 
 template<typename T>
 void Ref<T>::unload_ref() {
-	if (!has_loaded || !control) return;
+	if (!has_loaded || !resource) return;
 
 	has_loaded = false;
 
-	if (--control->load_count <= 0)
-		control->unload_res();
+	if (--resource->load_count <= 0) {
+		resource->unload();
+	}
 }
 
 template<typename T>
 void Ref<T>::release() {
-	if (!control) return;
+	if (!resource) return;
 	
 	unload_ref();
 
-	if (--control->ref_count <= 0) {
-		delete control->resource;
-		delete control;
+	if (--resource->ref_count <= 0) {
+		delete resource;
 	}
 
-	control = nullptr;
+	resource = nullptr;
 }
 
 template<typename T>
 T* Ref<T>::get() const {
-	if (!control) return nullptr;
-	return dynamic_cast<T*>(control->resource);
+	if (!resource) return nullptr;
+	return dynamic_cast<T*>(resource);
 }
 
 template<typename T>
 T& Ref<T>::operator*() const {
-	if (!control) return nullptr;
-	return *(control->resource);
+	if (!resource) return nullptr;
+	return *resource;
 }
 
 template<typename T>
@@ -161,26 +142,29 @@ T* Ref<T>::operator->() const {
 
 template<typename T>
 void Ref<T>::operator=(const Ref& other) {
-	hold(other.control);
+	hold(other.resource);
 }
 
 template<typename T>
 bool Ref<T>::operator==(const Ref& other) const {
-	return control == other.control;
+	return resource == other.resource;
 }
 
 template<typename T>
 Ref<T>::operator bool() const {
-	return control;
+	return resource;
 }
 
 template<typename T>
-void Ref<T>::hold(RefCtrl* new_ctrl) {
-	if (control == new_ctrl) return;
+void Ref<T>::hold(Resource* new_resource) {
+	if (resource == new_resource) return;
+
 	release();
 	
-	control = new_ctrl;
-	control->ref_count++;
+	resource = new_resource;
+	if (resource) {
+		resource->ref_count++;
+	}
 }
 
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "RefCtrl.hpp"
-
 #include <string>
 
 namespace engine {
@@ -13,16 +11,13 @@ public:
 	virtual const std::string& getResourceType() const;
 	explicit operator std::string() const;
 
-protected:
+
 	virtual void load();
 	virtual void unload();
 
-public:
-
+	int ref_count = 0;
+	int load_count = 0;
 	bool is_loaded = false;
-	std::string source = "";
-
-	friend RefCtrl;
 };
 
 }
