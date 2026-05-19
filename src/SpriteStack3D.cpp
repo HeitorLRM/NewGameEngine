@@ -16,7 +16,7 @@ void SpriteStack3D::render() {
 	const Transform3D camera_global = camera->getGlobalTransform();
 	const Transform3D to_clip = Transform3D{camera->getProjectionMatrix()};
 	const Vec2 D = getDimensions() * pixel_size;
-	const Vec2 P = pivot * pixel_size;
+	const Vec2 P = pivot * D;
 	const float L = 0.0 - P.x;
 	const float R = D.x - P.x;
 	const float B = 0.0 - P.y;

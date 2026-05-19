@@ -61,12 +61,13 @@ void Sprite2D::render() {
 
 	if (!texture.get()) return;
 	
-	const Vec2 d = getDimensions();
+	const Vec2 D = getDimensions();
+	const Vec2 P = pivot * D;
 	array<Vec2,4> vertices {
-		Vec2{0.0, 0.0} - pivot, // Top Left
-		Vec2{d.x, 0.0} - pivot, // Top Right
-		Vec2{0.0, d.y} - pivot, // Bottom Left
-		Vec2{d.x, d.y} - pivot  // Bottom Right
+		Vec2{0.0, 0.0} - P, // Top Left
+		Vec2{D.x, 0.0} - P, // Top Right
+		Vec2{0.0, D.y} - P, // Bottom Left
+		Vec2{D.x, D.y} - P  // Bottom Right
 	};
 
 	const auto camera = Game::getRenderPass()->active_camera2D;

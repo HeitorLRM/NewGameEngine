@@ -7,6 +7,4 @@ rework ref shared_ptr
 FPS manager
 audio
 timer
-mouse input
 vector default zero
-sprite 3D

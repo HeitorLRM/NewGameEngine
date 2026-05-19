@@ -65,7 +65,7 @@ void Sprite3D::render() {
 
 	// Model space
 	const Vec2 D = getDimensions() * pixel_size;
-	const Vec2 P = pivot * pixel_size;
+	const Vec2 P = pivot * D;
 	const float L = 0.0 - P.x;
 	const float R = D.x - P.x;
 	const float B = 0.0 - P.y;
@@ -132,7 +132,7 @@ Vec2 Sprite3D::getDimensions() const {
 }
 
 void Sprite3D::alignCenter() {
-	pivot = getDimensions()/2.0;
+	pivot = {0.5f, 0.5f};
 }
 
 array<Vec2, 4> Sprite3D::getFrameUVs(unsigned frame) const {

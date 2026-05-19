@@ -25,7 +25,7 @@ public:
 
 	void alignCenter();
 
-	Vec2 pivot{0.0, 0.0};
+	Vec2 pivot{0.5, 0.5}; // uv space.
 
 protected:
 	std::array<Vec2, 4> getFrameUVs(unsigned frame) const;
