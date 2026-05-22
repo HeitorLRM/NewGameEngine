@@ -85,7 +85,7 @@ void Game::mainLoop() {
 	}
 
 	while(auto pass = getRenderPass()) {
-		root->pre_render();
+		root->preRender();
 		pass->flush();
 		render_passes.pop();
 	}

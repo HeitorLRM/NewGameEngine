@@ -79,9 +79,9 @@ void GameObject::update(float delta_time) {
 	}
 }
 
-void GameObject::pre_render() {
+void GameObject::preRender() {
 	for (auto& child : children)
-		child->pre_render();
+		child->preRender();
 }
 
 void GameObject::render() {

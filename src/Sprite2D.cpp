@@ -46,13 +46,13 @@ void Sprite2D::unloadTexture() {
 		texture.unload_ref();
 }
 
-void Sprite2D::pre_render() {
+void Sprite2D::preRender() {
 	auto pass = Game::getRenderPass();
 	if (!pass || !pass->active_camera2D) return;
 
 	pass->queue(this);
 
-	Object2D::pre_render();
+	Object2D::preRender();
 }
 
 void Sprite2D::render() {
