@@ -16,7 +16,7 @@ public:
 
 	virtual void load() override;
 	virtual void unload() override;
-	virtual void pre_render() override;
+	virtual void preRender() override;
 	virtual void render() override;
 	
 	void setTexture(Ref<Texture> texture);

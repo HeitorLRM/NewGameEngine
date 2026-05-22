@@ -44,7 +44,7 @@ void Sprite3D::unloadTexture() {
 		texture.unload_ref();
 }
 
-void Sprite3D::pre_render() {
+void Sprite3D::preRender() {
 	auto pass = Game::getRenderPass();
 	if (!pass || !pass->active_camera3D) return;
 
@@ -55,7 +55,7 @@ void Sprite3D::pre_render() {
 
 	pass->queue(this);
 
-	Object3D::pre_render();
+	Object3D::preRender();
 }
 
 void Sprite3D::render() {

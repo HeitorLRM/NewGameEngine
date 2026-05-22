@@ -14,7 +14,7 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void update(float delta_time);
-	virtual void pre_render();
+	virtual void preRender();
 	virtual void render();
 
 	GameObject* getParent();
