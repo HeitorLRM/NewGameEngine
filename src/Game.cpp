@@ -15,6 +15,7 @@ using namespace engine;
 using std::queue;
 
 Ref<CameraFeed> Game::window_feed;
+queue<Ref<GameObject>> Game::kill_queue;
 queue<RenderPass> Game::render_passes;
 bool Game::quit_requested = false;
 Ref<GameObject> Game::root;
@@ -77,6 +78,10 @@ void Game::run() {
 	close();
 }
 
+void Game::enqueueKill(Ref<GameObject> obj) {
+    kill_queue.push(obj);
+}
+
 void Game::mainLoop() {
 	AppIO::update();
 
@@ -88,6 +93,14 @@ void Game::mainLoop() {
 		root->pre_render();
 		pass->flush();
 		render_passes.pop();
+	}
+
+	while (!kill_queue.empty()) {
+	    auto obj = kill_queue.front();
+		kill_queue.pop();
+		if (obj->getParent()) {
+		    obj->getParent()->removeChild(obj.get());
+		}
 	}
 
 	AppIO::render();
@@ -113,4 +126,3 @@ void Game::close() {
 	unloadRoot();
 	AppIO::close();
 }
-

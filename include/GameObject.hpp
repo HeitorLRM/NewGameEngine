@@ -19,6 +19,7 @@ public:
 
 	GameObject* getParent();
 	virtual void setParent(GameObject*);
+	void requestKill();
 
 	void addChild(Ref<GameObject>);
 	void addChild(Ref<GameObject>, unsigned index);
@@ -33,4 +34,3 @@ private:
 };
 
 }
-

@@ -21,12 +21,16 @@ void GameObject::setParent(GameObject* parent) {
 
 	if (this->parent)
 		this->parent->removeChild(this);
-	
+
 	this->parent = parent;
 }
 
 GameObject* GameObject::getParent() {
 	return parent;
+}
+
+void GameObject::requestKill() {
+    Game::enqueueKill(Ref(this));
 }
 
 void GameObject::addChild(Ref<GameObject> child) {

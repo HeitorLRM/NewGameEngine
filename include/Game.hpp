@@ -15,7 +15,7 @@ public:
 
 	static void run();
 	static void requestQuit();
-	
+
 	static void loadRoot(Ref<GameObject>);
 	static void unloadRoot();
 	static Ref<GameObject> getRoot();
@@ -23,13 +23,15 @@ public:
 	static void registerPass(Camera3D*);
 	static RenderPass* getRenderPass();
 
+	static void enqueueKill(Ref<GameObject>);
+
 private:
 	static void init();
 	static void close();
 
 	static void mainLoop();
 	static bool shouldQuit();
-	
+
 public:
 	static void (*init_callback)();
 	static void (*close_callback)();
@@ -38,6 +40,7 @@ public:
 
 private:
 	static std::queue<RenderPass> render_passes;
+	static std::queue<Ref<GameObject>> kill_queue;
 	static bool quit_requested;
 	static Ref<GameObject> root;
 };
