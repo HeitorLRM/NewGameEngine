@@ -3,8 +3,13 @@
 #include "CameraFeed.hpp"
 #include "Game.hpp"
 #include "Math.hpp"
+#include "Matrix4.hpp"
 #include "Object3D.hpp"
 #include "Ref.hpp"
+#include "Vec2.hpp"
+#include "Vec3.hpp"
+
+#include <utility>
 
 class SDL_Texture;
 
@@ -20,6 +25,8 @@ public:
 
 	const Transform3D& getInverseGlobal();
 	Matrix4 getProjectionMatrix() const;
+	Matrix4 getInverseProjectionMatrix() const;
+	std::pair<Vec3, Vec3> castRayFromView(const Vec2& screen_pos);
 
 public:
 	Ref<CameraFeed> feed = Game::window_feed;
