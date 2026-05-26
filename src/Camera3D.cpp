@@ -63,11 +63,12 @@ Matrix4 Camera3D::getProjectionMatrix() const  {
 	const float t = 1.0/tan(fov/2.0);
 	const float zp = far + near;
 	const float zm = far - near;
+	const float zz = -2.0f * near * far;
 
 	return {
 		t/a, 0, 0, 0,
 		0,   t, 0, 0,
-		0,   0, -zp/zm, -(2.0f*far*near)/zm,
+		0,   0, -zp/zm, zz/zm,
 		0,   0, -1, 0
 	};
 }
@@ -77,20 +78,21 @@ Matrix4 Camera3D::getInverseProjectionMatrix() const {
 	if (feed)
 		a = feed->screen_area.w / feed->screen_area.h;
 
-	const float t = tan(fov/2.0);
+	const float t = 1/tan(fov/2.0);
 	const float zp = far + near;
 	const float zm = far - near;
-	const float zz = 2.0f*near*far;
+	const float zz = -2.0f*near*far;
 
 	return {
-		a*t, 0, 0, 0,
-		0, t, 0, 0,
+		a/t, 0, 0, 0,
+		0, 1/t, 0, 0,
 		0, 0, 0, -1,
-		0, 0, zm/zz, zp/zz
+		0, 0, zm/zz, -zp/zz
 	};
 }
 
 std::pair<Vec3, Vec3> Camera3D::castRayFromView(const Vec2& screen_pos) {
+	// Pretty sure it doesn't work
 	Vec2 clip_pos = screen_pos/feed->screen_area.dimensions;
 	clip_pos = {2.0f*clip_pos.x - 1.0f, 1.0f - 2.0f*clip_pos.y};
 	Vec4 near_clip = {clip_pos.x, clip_pos.y, -1, 1};
