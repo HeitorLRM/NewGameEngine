@@ -113,7 +113,7 @@ void Sprite3D::render() {
 		vertices2D[i].y = (1.0f - vertices3D[i].y) * feed_offset.y;
 	}
 
-	texture->renderQuad(vertices2D, getFrameUVs(current_frame));
+	texture->renderQuad(vertices2D, getFrameUVs(current_frame), modulation);
 }
 
 void Sprite3D::setTexture(Ref<Texture> texture) {

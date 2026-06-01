@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AppIO.hpp"
+#include "Color.hpp"
 #include "Rect.hpp"
 #include "Ref.hpp"
 #include "Vec2.hpp"
@@ -17,7 +18,7 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void render(const Rect& clip, const Rect& dst) = 0;
-	virtual void renderQuad(const std::array<Vec2, 4>& vertices, const std::array<Vec2, 4>& uvs) = 0;
+	virtual void renderQuad(const std::array<Vec2, 4>& vertices, const std::array<Vec2, 4>& uvs, Color modulation = {1.0,1.0,1.0,1.0}) = 0;
 
 	static Ref<Texture> fromFile(const std::string& filepath);
 

@@ -38,6 +38,7 @@ public:
 		unsigned vertical_count = 1;
 	} spritesheet;
 
+	Color modulation = {1,1,1,1};
 	unsigned current_frame = 0;
 	int z_index = 0;
 

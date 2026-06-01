@@ -80,7 +80,7 @@ void Sprite2D::render() {
 		vertex += pos;
 	}
 
-	texture->renderQuad(vertices, getFrameUVs(current_frame));
+	texture->renderQuad(vertices, getFrameUVs(current_frame), modulation);
 }
 
 void Sprite2D::setTexture(Ref<Texture> texture) {

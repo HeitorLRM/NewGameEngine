@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Color.hpp"
 #include "SDL_AppIO.hpp"
 #include "Texture.hpp"
 
@@ -14,7 +15,7 @@ public:
 	void load() override;
 	void unload() override;
 	void render(const Rect& clip, const Rect& dst) override;
-	void renderQuad(const std::array<Vec2,4>& vertices, const std::array<Vec2,4>& uvs) override;
+	void renderQuad(const std::array<Vec2,4>& vertices, const std::array<Vec2,4>& uvs, Color modulation = {1.0,1.0,1.0,1.0}) override;
 
 private:
 	SDL_Texture* sdl_texture;

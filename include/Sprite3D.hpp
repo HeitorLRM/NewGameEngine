@@ -3,6 +3,7 @@
 #pragma once
 
 #include "AppIO.hpp"
+#include "Color.hpp"
 #include "Object3D.hpp"
 #include "Texture.hpp"
 #include "Vec2.hpp"
@@ -36,6 +37,7 @@ protected:
 public:
 	float pixel_size = 1.0/64.0;
 	bool is_billboard = false;
+	Color modulation = {1.0,1.0,1.0,1.0};
 
 	struct {
 		unsigned horizontal_count = 1;

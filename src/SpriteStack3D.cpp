@@ -67,6 +67,6 @@ void SpriteStack3D::render() {
 			vertices2D[i].y = (1.0f - vertices3D[i].y) * feed_offset.y;
 		}
 
-		texture->renderQuad(vertices2D, getFrameUVs(frame));
+		texture->renderQuad(vertices2D, getFrameUVs(frame), modulation);
 	}
 }
