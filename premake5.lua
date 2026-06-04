@@ -53,5 +53,4 @@ project "GameEngine"
         symbols "On"
 
     filter { "configurations:Release" }
-        linktimeoptimization "On"
         defines { "NDEBUG" }
