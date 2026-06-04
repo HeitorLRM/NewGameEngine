@@ -37,9 +37,13 @@ project "GameEngine"
     }
 
     filter { "system:macosx" }
-        sanitize { "Address", "UndefinedBehavior"}
+        sanitize { "Address" }
+        buildoptions { "-fsanitize=undefined" }
+        linkoptions { "-fsanitize=undefined" }
     filter { "system:linux" }
-        sanitize { "Address", "Fuzzer", "UndefinedBehavior"}
+        sanitize { "Address" }
+        buildoptions { "-fsanitize=undefined", "-fsanitize=fuzzer" }
+        linkoptions { "-fsanitize=undefined", "-fsanitize=fuzzer" }
     filter {}
 
     optimize "On"
