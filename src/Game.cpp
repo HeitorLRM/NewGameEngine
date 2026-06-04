@@ -8,7 +8,10 @@
 #include "SDL_AppIO.hpp"
 #include "GameObject.hpp"
 
+#include <SDL3/SDL.h>
+
 #include <queue>
+#include <iostream>
 
 using namespace engine;
 
@@ -19,6 +22,7 @@ queue<Ref<GameObject>> Game::kill_queue;
 queue<RenderPass> Game::render_passes;
 bool Game::quit_requested = false;
 Ref<GameObject> Game::root;
+uint64_t Game::lastTicks = 0;
 
 
 void Game::requestQuit() {
@@ -85,8 +89,12 @@ void Game::enqueueKill(Ref<GameObject> obj) {
 void Game::mainLoop() {
 	AppIO::update();
 
+	uint64_t nowTicks = SDL_GetTicksNS();
+	float deltaTime = (nowTicks-lastTicks)/1e9;
+	lastTicks = nowTicks;
+
 	if (root) {
-		root->update(1.0/30.0);
+		root->update(deltaTime);
 	}
 
 	while(auto pass = getRenderPass()) {

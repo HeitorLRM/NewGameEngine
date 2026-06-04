@@ -28,10 +28,10 @@ MouseInput AppIO::mouse;
 bool AppIO::shouldClose() {
 	SDL_PumpEvents();
 	return SDL_PeepEvents(
-		NULL, 
-		0, 
-		SDL_PEEKEVENT, 
-		SDL_EVENT_QUIT, 
+		NULL,
+		0,
+		SDL_PEEKEVENT,
+		SDL_EVENT_QUIT,
 		SDL_EVENT_QUIT
 	) > 0;
 }
@@ -46,11 +46,11 @@ void AppIO::init() {
 
 	// Initialize window
 	SDL_CreateWindowAndRenderer(
-		SDL::window_title.c_str(), 
-		SDL::window_dimensions.x, 
-		SDL::window_dimensions.y, 
-		0, 
-		&SDL::window, 
+		SDL::window_title.c_str(),
+		SDL::window_dimensions.x,
+		SDL::window_dimensions.y,
+		0,
+		&SDL::window,
 		&SDL::renderer
 	);
 
@@ -114,4 +114,3 @@ void AppIO::SDL::closeSDL() {
 	// Close SDL
 	SDL_Quit();
 }
-
