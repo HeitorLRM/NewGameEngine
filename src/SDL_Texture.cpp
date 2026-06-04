@@ -63,6 +63,9 @@ void SDL::Texture::load() {
 			SDL_SCALEMODE_NEAREST
 		);
 	}
+	else {
+		throw runtime_error("could not load texture '" + load_path + "'.");
+	}
 }
 
 void SDL::Texture::unload() {

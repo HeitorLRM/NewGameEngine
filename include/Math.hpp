@@ -14,12 +14,14 @@ constexpr bool eps_equal(const float& f0, const float& f1) {
 	return std::abs( f0 - f1 ) <= EPS;
 }
 
-constexpr float lerp(float a, float b, float t) {
-	float delta = b - a;
+template<typename T>
+constexpr T lerp(T a, T b, float t) {
+	T delta = b - a;
 	return a + t*delta;
 }
 
-constexpr float damp(float from, float target, float tau, float delta_time) {
+template<typename T>
+constexpr float damp(T from, T target, float tau, float delta_time) {
 	float t = 1.0f - exp(-delta_time/tau);
 	return lerp(from, target, t);
 }
