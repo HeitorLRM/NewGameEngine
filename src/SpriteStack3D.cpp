@@ -1,6 +1,12 @@
 #include "SpriteStack3D.hpp"
 #include "Camera3D.hpp"
 
+#include <fstream>
+#include <iostream>
+
+#include "json.hpp"
+using json = nlohmann::json;
+
 using namespace engine;
 
 using std::array;
@@ -35,12 +41,12 @@ void SpriteStack3D::render() {
 			Vec3{L, B, Z}, // Bottom Left
 			Vec3{R, B, Z}, // Bottom Right
 		};
-		
+
 		for (auto& vertex : vertices3D) {
 			// World space
-			if (is_billboard) vertex = 
-				vertex.x*camera_global.basis.i + 
-				vertex.y*camera_global.basis.j + 
+			if (is_billboard) vertex =
+				vertex.x*camera_global.basis.i +
+				vertex.y*camera_global.basis.j +
 				to_world.position;
 			else
 				vertex = to_world * vertex;
@@ -50,7 +56,7 @@ void SpriteStack3D::render() {
 
 			// Clip space
 			Vec4 v_clip = to_clip.matrix * Vec4{vertex.x, vertex.y, vertex.z, 1};
-			
+
 			// Perspective
 			vertex = v_clip.xyz / v_clip.w;
 			// Note: NDC space maps clip boundaries to [-1, 1] in x,y,z
@@ -58,7 +64,7 @@ void SpriteStack3D::render() {
 			// Z-culling
 			if (vertex.z < -1.0)
 				continue;
-		} 
+		}
 		// Screen space
 		const Vec2 feed_offset = camera->feed->screen_area.dimensions/2;
 		array<Vec2,4> vertices2D;
@@ -69,4 +75,30 @@ void SpriteStack3D::render() {
 
 		texture->renderQuad(vertices2D, getFrameUVs(frame), modulation);
 	}
+
+}
+
+void SpriteStack3D::loadFromFile(std::filesystem::path path) {
+    std::ifstream inFile(path);
+    json data = json::parse(inFile);
+
+    std::string imagePath = data["image"];
+    int horizontal = data["horizontal"], vertical = data["vertical"];
+    std::vector<unsigned int> layers = data["layers"];
+    double dist = data["distance"];
+    int rep = data["rep"];
+
+    std::vector<unsigned int> repLayers;
+    for (auto x : layers) {
+        for (int i = 0; i < rep; i++) {
+            repLayers.push_back(x);
+        }
+    }
+    dist /= rep;
+
+    setTexture(Texture::fromFile(imagePath));
+    spritesheet.horizontal_count = horizontal;
+    spritesheet.vertical_count = vertical;
+    stack = repLayers;
+    separation = dist * pixel_size;
 }
