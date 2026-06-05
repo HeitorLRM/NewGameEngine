@@ -4,6 +4,7 @@
 
 #include "RenderPass.hpp"
 #include "Ref.hpp"
+#include <cstdint>
 namespace engine {
 
 class GameObject;
