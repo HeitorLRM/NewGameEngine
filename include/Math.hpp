@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Vec2.hpp" // IWYU pragma: export
+#include "Vec3.hpp" // IWYU pragma: export
+#include "Vec4.hpp" // IWYU pragma: export
 #include <cmath>
 
 using std::abs;
@@ -21,7 +24,7 @@ constexpr T lerp(T a, T b, float t) {
 }
 
 template<typename T>
-constexpr float damp(T from, T target, float tau, float delta_time) {
+constexpr T damp(T from, T target, float tau, float delta_time) {
 	float t = 1.0f - exp(-delta_time/tau);
 	return lerp(from, target, t);
 }
