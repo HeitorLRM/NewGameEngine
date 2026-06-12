@@ -77,6 +77,10 @@ list<Ref<GameObject>>& GameObject::getChildren() {
 	return children;
 }
 
+Ref<GameObject> GameObject::getSelf() {
+	return getParent()->getChild(this);
+}
+
 void GameObject::update(float delta_time) {
 	for (auto& child : children) {
 		child->update(delta_time);

@@ -25,6 +25,7 @@ public:
 	void addChild(Ref<GameObject>, unsigned index);
 	void removeChild(GameObject*);
 	Ref<GameObject> getChild(GameObject*);
+	Ref<GameObject> getSelf();
 	std::list<Ref<GameObject>>& getChildren();
 
 private:
