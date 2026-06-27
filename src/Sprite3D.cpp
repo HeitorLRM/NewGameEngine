@@ -84,9 +84,9 @@ void Sprite3D::render() {
 	const Transform3D to_clip = Transform3D{camera->getProjectionMatrix()};
 	for (auto& vertex : vertices3D) {
 		// World space
-		if (is_billboard) vertex = 
-			vertex.x*camera_global.basis.i + 
-			vertex.y*camera_global.basis.j + 
+		if (is_billboard) vertex =
+			vertex.x*camera_global.basis.i +
+			vertex.y*camera_global.basis.j +
 			to_world.position;
 		else
 			vertex = to_world * vertex;
@@ -96,7 +96,7 @@ void Sprite3D::render() {
 
 		// Clip space
 		Vec4 v_clip = to_clip.matrix * Vec4{vertex.x, vertex.y, vertex.z, 1};
-		
+
 		// Perspective
 		vertex = v_clip.xyz / v_clip.w;
 		// Note: NDC space maps clip boundaries to [-1, 1] in x,y,z
@@ -104,7 +104,7 @@ void Sprite3D::render() {
 		// Z-culling
 		if (vertex.z < -1.0)
 			return;
-	} 
+	}
 	// Screen space
 	const Vec2 feed_offset = camera->feed->screen_area.dimensions/2;
 	array<Vec2,4> vertices2D;
@@ -137,7 +137,7 @@ void Sprite3D::alignCenter() {
 
 array<Vec2, 4> Sprite3D::getFrameUVs(unsigned frame) const {
 	unsigned i = frame % spritesheet.horizontal_count;
-	unsigned j = frame / spritesheet.vertical_count;
+	unsigned j = frame / spritesheet.horizontal_count;
 	Vec2 size = {(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
 	Vec2 d = Vec2{1.0, 1.0} / size;
 	Vec2 origin = Vec2{(float)i,(float)j} / size;

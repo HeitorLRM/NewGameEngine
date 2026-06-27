@@ -25,7 +25,7 @@ const std::string& Sprite2D::getResourceType() const {
 
 void Sprite2D::load() {
 	Object2D::load();
-	
+
 	loadTexture();
 }
 
@@ -55,13 +55,8 @@ void Sprite2D::preRender() {
 	Object2D::preRender();
 }
 
-void Sprite2D::render() {
-	// call super
-	Object2D::render();
-
-	if (!texture.get()) return;
-	
-	const Vec2 D = getDimensions();
+std::array<Vec2, 4> Sprite2D::getVertices() {
+    const Vec2 D = getDimensions();
 	const Vec2 P = pivot * D;
 	array<Vec2,4> vertices {
 		Vec2{0.0, 0.0} - P, // Top Left
@@ -70,14 +65,27 @@ void Sprite2D::render() {
 		Vec2{D.x, D.y} - P  // Bottom Right
 	};
 
-	const auto camera = Game::getRenderPass()->active_camera2D;
-	const Transform2D viewTransform = camera->getInverseGlobal() * getGlobalTransform();
-	const Vec2 pos = viewTransform.position + camera->feed->screen_area.dimensions/2;
-	const Basis2D& basis = viewTransform.basis;
+	const auto globalTransform = getGlobalTransform();
+	for (auto &vertex : vertices) {
+	    vertex = globalTransform * vertex;
+	}
 
+	return vertices;
+}
+
+void Sprite2D::render() {
+	// call super
+	Object2D::render();
+
+	if (!texture.get()) return;
+
+	const auto camera = Game::getRenderPass()->active_camera2D;
+	Transform2D viewTransform = camera->getInverseGlobal();
+	viewTransform.translate(camera->feed->screen_area.dimensions/2);
+
+	auto vertices = getVertices();
 	for (auto& vertex : vertices) {
-		vertex = vertex.x*basis.i + vertex.y*basis.j;
-		vertex += pos;
+		vertex = viewTransform * vertex;
 	}
 
 	texture->renderQuad(vertices, getFrameUVs(current_frame), modulation);
@@ -85,7 +93,7 @@ void Sprite2D::render() {
 
 void Sprite2D::setTexture(Ref<Texture> texture) {
 	this->texture = texture;
-	
+
 	if (is_loaded)
 		this->texture.load_ref();
 }
@@ -104,7 +112,7 @@ void Sprite2D::alignCenter() {
 
 array<Vec2, 4> Sprite2D::getFrameUVs(unsigned frame) const {
 	unsigned i = frame % spritesheet.horizontal_count;
-	unsigned j = frame / spritesheet.vertical_count;
+	unsigned j = frame / spritesheet.horizontal_count;
 	Vec2 size = {(float)spritesheet.horizontal_count, (float)spritesheet.vertical_count};
 	Vec2 d = Vec2{1.0, 1.0} / size;
 	Vec2 origin = Vec2{(float)i,(float)j} / size;
@@ -115,4 +123,3 @@ array<Vec2, 4> Sprite2D::getFrameUVs(unsigned frame) const {
 		origin + d // Bottom Right
 	};
 }
-

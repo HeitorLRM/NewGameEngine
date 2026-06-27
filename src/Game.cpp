@@ -93,12 +93,13 @@ void Game::mainLoop() {
 	float deltaTime = (nowTicks-lastTicks)/1e9;
 	lastTicks = nowTicks;
 
-	if (root) {
-		root->update(deltaTime);
+	auto cur_root = root;
+	if (cur_root) {
+		cur_root->update(deltaTime);
 	}
 
 	while(auto pass = getRenderPass()) {
-		root->preRender();
+		cur_root->preRender();
 		pass->flush();
 		render_passes.pop();
 	}
