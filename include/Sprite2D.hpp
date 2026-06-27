@@ -17,7 +17,7 @@ public:
 	virtual void unload() override;
 	virtual void preRender() override;
 	virtual void render() override;
-	
+
 	void setTexture(Ref<Texture> texture);
 	Ref<Texture> getTexture();
 	Vec2 getDimensions() const;
@@ -28,6 +28,7 @@ public:
 
 protected:
 	std::array<Vec2, 4> getFrameUVs(unsigned frame) const;
+	std::array<Vec2, 4> getVertices();
 
 	void loadTexture();
 	void unloadTexture();
