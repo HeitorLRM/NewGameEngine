@@ -10,9 +10,9 @@
 
 #include <SDL3/SDL.h>
 
+#include <algorithm>
 #include <queue>
 #include <vector>
-#include <iostream>
 
 using namespace engine;
 
@@ -103,9 +103,9 @@ void Game::mainLoop() {
 	reverse(render_passes.begin(), render_passes.end());
 
 	// just clear everything, regardless of order
-	// for (auto &pass : render_passes) {
-	// 	pass.getFeed()->clear();
-	// }
+	for (auto &pass : render_passes) {
+	 	pass.getFeed()->clear();
+	}
 
 	// render back to front
 	while (auto pass = getRenderPass()) {
