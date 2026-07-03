@@ -1,6 +1,8 @@
 #pragma once
 
 #include <queue>
+#include "CameraFeed.hpp"
+#include "Ref.hpp"
 
 namespace engine {
 
@@ -16,6 +18,7 @@ public:
 public:
 	Camera2D* active_camera2D = nullptr;
 	Camera3D* active_camera3D = nullptr;
+	Ref<CameraFeed> getFeed();
 
 private:
 	struct QueueEntry {

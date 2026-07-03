@@ -11,15 +11,17 @@
 #include <SDL3/SDL.h>
 
 #include <queue>
+#include <vector>
 #include <iostream>
 
 using namespace engine;
 
 using std::queue;
+using std::vector;
 
 Ref<CameraFeed> Game::window_feed;
 queue<Ref<GameObject>> Game::kill_queue;
-queue<RenderPass> Game::render_passes;
+vector<RenderPass> Game::render_passes;
 bool Game::quit_requested = false;
 Ref<GameObject> Game::root;
 uint64_t Game::lastTicks = 0;
@@ -56,20 +58,20 @@ Ref<GameObject> Game::getRoot() {
 void Game::registerPass(Camera2D* c) {
 	RenderPass pass;
 	pass.active_camera2D = c;
-	render_passes.push(pass);
+	render_passes.push_back(pass);
 }
 
 void Game::registerPass(Camera3D* c) {
 	RenderPass pass;
 	pass.active_camera3D = c;
-	render_passes.push(pass);
+	render_passes.push_back(pass);
 }
 
 RenderPass* Game::getRenderPass() {
 	if (render_passes.empty())
 		return nullptr;
 
-	return &render_passes.front();
+	return &render_passes.back();
 }
 
 void Game::run() {
@@ -98,11 +100,20 @@ void Game::mainLoop() {
 		cur_root->update(deltaTime);
 	}
 
-	while(auto pass = getRenderPass()) {
+	reverse(render_passes.begin(), render_passes.end());
+
+	// just clear everything, regardless of order
+	// for (auto &pass : render_passes) {
+	// 	pass.getFeed()->clear();
+	// }
+
+	// render back to front
+	while (auto pass = getRenderPass()) {
 		cur_root->preRender();
 		pass->flush();
-		render_passes.pop();
+		render_passes.pop_back();
 	}
+	render_passes.clear();
 
 	while (!kill_queue.empty()) {
 	    auto obj = kill_queue.front();

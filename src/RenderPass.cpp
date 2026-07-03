@@ -22,27 +22,20 @@ void RenderPass::queue(GameObject* obj) {
 	render_queue.push(entry);
 }
 
-void RenderPass::flush() {
-	Ref<CameraFeed> feed;
+Ref<CameraFeed> RenderPass::getFeed() {
+    Ref<CameraFeed> feed;
 	if (active_camera2D)
 		feed = active_camera2D->feed;
 	else if (active_camera3D)
 		feed = active_camera3D->feed;
-	if (!feed) return;
+	return feed;
+}
 
-	SDL_SetRenderTarget(AppIO::SDL::renderer, feed->output);
+void RenderPass::flush() {
+    auto feed = getFeed();
+    if (!feed) return;
 
-	SDL_SetRenderDrawColor(
-		AppIO::SDL::renderer, 
-		feed->fill_color.r * 255, 
-		feed->fill_color.g * 255, 
-		feed->fill_color.b * 255, 
-		feed->fill_color.a * 255
-	);
-	SDL_RenderClear(AppIO::SDL::renderer);
-
-
-	while (!render_queue.empty()) {	
+	while (!render_queue.empty()) {
 		auto obj = render_queue.top().obj;
 		render_queue.pop();
 		obj->render();
@@ -52,8 +45,8 @@ void RenderPass::flush() {
 	auto& screen_area = feed->screen_area;
 	SDL_FRect clip{
 		0,
-		0, 
-		screen_area.w, 
+		0,
+		screen_area.w,
 		screen_area.h
 	};
 	SDL_FRect dst{
@@ -64,10 +57,9 @@ void RenderPass::flush() {
 	};
 
 	SDL_RenderTexture(
-		AppIO::SDL::renderer, 
-		feed->output, 
+		AppIO::SDL::renderer,
+		feed->output,
 		&clip,
 		&dst
 	);
 }
-

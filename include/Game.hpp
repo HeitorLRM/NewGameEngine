@@ -40,7 +40,7 @@ public:
 	static Ref<CameraFeed> window_feed;
 
 private:
-	static std::queue<RenderPass> render_passes;
+	static std::vector<RenderPass> render_passes;
 	static std::queue<Ref<GameObject>> kill_queue;
 	static bool quit_requested;
 	static uint64_t lastTicks;

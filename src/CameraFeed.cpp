@@ -14,10 +14,10 @@ void CameraFeed::load() {
 	Resource::load();
 
 	output = SDL_CreateTexture(
-		AppIO::SDL::renderer, 
-		SDL_PIXELFORMAT_RGBA8888, 
-		SDL_TEXTUREACCESS_TARGET, 
-		screen_area.w, 
+		AppIO::SDL::renderer,
+		SDL_PIXELFORMAT_RGBA8888,
+		SDL_TEXTUREACCESS_TARGET,
+		screen_area.w,
 		screen_area.h
 	);
 }
@@ -26,4 +26,16 @@ void CameraFeed::unload() {
 	SDL_DestroyTexture(output);
 
 	Resource::unload();
+}
+
+void CameraFeed::clear() {
+    SDL_SetRenderTarget(AppIO::SDL::renderer, output);
+	SDL_SetRenderDrawColor(
+		AppIO::SDL::renderer,
+		fill_color.r * 255,
+		fill_color.g * 255,
+		fill_color.b * 255,
+		fill_color.a * 255
+	);
+	SDL_RenderClear(AppIO::SDL::renderer);
 }

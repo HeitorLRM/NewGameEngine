@@ -2,7 +2,6 @@
 
 #include "Color.hpp"
 #include "Rect.hpp"
-#include "RenderPass.hpp"
 #include "Resource.hpp"
 
 class SDL_Texture;
@@ -15,14 +14,12 @@ public:
 
 	void load() override;
 	void unload() override;
+	void clear();
 
 public:
 	Rect screen_area;
 	Color fill_color;
-
-private:
 	SDL_Texture* output;
-	friend RenderPass;
 };
 
 }
