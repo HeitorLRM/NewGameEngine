@@ -1,7 +1,9 @@
 #include "SDL_AppIO.hpp"
 #include "AppIO.hpp"
+#include "GamepadInput.hpp"
 #include "KeyboardInput.hpp"
 #include "MouseInput.hpp"
+#include "SDL_init.h"
 #include "Vec2.hpp"
 
 #include <SDL3/SDL.h>
@@ -24,6 +26,8 @@ using namespace engine;
 
 KeyboardInput AppIO::keyboard;
 MouseInput AppIO::mouse;
+GamepadInput AppIO::gamepad;
+SDL_Gamepad* AppIO::SDL::sdl_gamepad = nullptr;
 
 bool AppIO::shouldClose() {
 	SDL_PumpEvents();
@@ -72,6 +76,7 @@ void AppIO::close() {
 void AppIO::update() {
 	keyboard.update();
 	mouse.update();
+	gamepad.update();
 }
 
 void AppIO::render() {
@@ -89,7 +94,7 @@ MIX_Mixer* AppIO::SDL::mixer = nullptr;
 void AppIO::SDL::initSDL() {
 	bool initialized;
 	// Initialize SDL
-	initialized = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	initialized = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD);
 	if (!initialized)
 		throw runtime_error(SDL_GetError());
 

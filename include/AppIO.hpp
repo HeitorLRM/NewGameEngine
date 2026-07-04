@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GamepadInput.hpp"
 #include "KeyboardInput.hpp"
 #include "MouseInput.hpp"
 
@@ -19,6 +20,7 @@ extern bool shouldClose();
 
 extern KeyboardInput keyboard;
 extern MouseInput mouse;
+extern GamepadInput gamepad;
 
 };
 
