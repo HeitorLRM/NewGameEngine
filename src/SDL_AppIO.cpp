@@ -3,7 +3,7 @@
 #include "GamepadInput.hpp"
 #include "KeyboardInput.hpp"
 #include "MouseInput.hpp"
-#include "SDL_init.h"
+#include <SDL3/SDL_init.h>
 #include "Vec2.hpp"
 
 #include <SDL3/SDL.h>

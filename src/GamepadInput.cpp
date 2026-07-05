@@ -1,6 +1,6 @@
 #include "GamepadInput.hpp"
 #include "SDL_AppIO.hpp"
-#include "SDL_gamepad.h"
+#include <SDL3/SDL_gamepad.h>
 #include "Vec2.hpp"
 
 #include <SDL3/SDL_events.h>
