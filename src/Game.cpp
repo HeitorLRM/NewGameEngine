@@ -10,7 +10,6 @@
 
 #include <SDL3/SDL.h>
 
-#include <algorithm>
 #include <queue>
 #include <vector>
 
@@ -107,7 +106,6 @@ void Game::mainLoop() {
 	 	pass.getFeed()->clear();
 	}
 
-	// render back to front
 	while (auto pass = getRenderPass()) {
 		cur_root->preRender();
 		pass->flush();

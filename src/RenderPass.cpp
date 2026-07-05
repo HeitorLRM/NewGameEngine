@@ -7,6 +7,7 @@
 #include <SDL3/SDL_render.h>
 #include "Sprite2D.hpp"
 #include "Sprite3D.hpp"
+#include "Text.hpp"
 
 using namespace engine;
 
@@ -18,6 +19,8 @@ void RenderPass::queue(GameObject* obj) {
 		entry.priority = obj_sprite->z_index;
 	else if (auto obj_sprite3D = dynamic_cast<Sprite3D*>(obj))
 		entry.priority = obj_sprite3D->z_index;
+	else if (auto obj_text = dynamic_cast<Text*>(obj))
+		entry.priority = obj_text->z_index;
 
 	render_queue.push(entry);
 }
@@ -35,6 +38,7 @@ void RenderPass::flush() {
     auto feed = getFeed();
     if (!feed) return;
 
+    SDL_SetRenderTarget(AppIO::SDL::renderer, feed->output);
 	while (!render_queue.empty()) {
 		auto obj = render_queue.top().obj;
 		render_queue.pop();
