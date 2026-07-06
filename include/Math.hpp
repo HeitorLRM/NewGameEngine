@@ -6,6 +6,7 @@
 #include "Vec3.hpp" // IWYU pragma: export
 #include "Vec4.hpp" // IWYU pragma: export
 #include <cmath>
+#include <cstdlib>
 
 using std::abs;
 
@@ -29,3 +30,10 @@ constexpr T damp(T from, T target, float tau, float delta_time) {
 	return lerp(from, target, t);
 }
 
+inline float randf() {
+	return float(rand()) / RAND_MAX;
+}
+
+inline float randf(float min_val, float max_val) {
+	return lerp(min_val, max_val, randf());
+}

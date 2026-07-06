@@ -85,8 +85,8 @@ void Sprite3D::render() {
 	for (auto& vertex : vertices3D) {
 		// World space
 		if (is_billboard) vertex =
-			vertex.x*camera_global.basis.i +
-			vertex.y*camera_global.basis.j +
+			vertex.x*camera_global.basis.i*to_world.basis.i.len() +
+			vertex.y*camera_global.basis.j*to_world.basis.j.len() +
 			to_world.position;
 		else
 			vertex = to_world * vertex;
