@@ -102,7 +102,7 @@ void Sprite3D::render() {
 		// Note: NDC space maps clip boundaries to [-1, 1] in x,y,z
 
 		// Z-culling
-		if (vertex.z < -1.0)
+		if (v_clip.z < -v_clip.w)
 			return;
 	}
 	// Screen space
