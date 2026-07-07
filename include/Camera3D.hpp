@@ -22,6 +22,7 @@ public:
 	void load() override;
 	void unload() override;
 	void update(float) override;
+	virtual RenderPass::QueueEntry makeEntry(GameObject*);
 
 	const Transform3D& getInverseGlobal();
 	Matrix4 getProjectionMatrix() const;

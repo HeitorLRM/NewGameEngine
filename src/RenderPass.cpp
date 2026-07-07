@@ -3,24 +3,21 @@
 #include "RenderPass.hpp"
 #include "GameObject.hpp"
 #include "SDL_AppIO.hpp"
+
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>
-#include "Sprite2D.hpp"
-#include "Sprite3D.hpp"
-#include "Text.hpp"
 
 using namespace engine;
 
 void RenderPass::queue(GameObject* obj) {
 	QueueEntry entry;
-	entry.obj = obj;
+	if (active_camera2D)
+		entry = active_camera2D->makeEntry(obj);
+	else if (active_camera3D)
+		entry = active_camera3D->makeEntry(obj);
 
-	if (auto obj_sprite = dynamic_cast<Sprite2D*>(obj))
-		entry.priority = obj_sprite->z_index;
-	else if (auto obj_sprite3D = dynamic_cast<Sprite3D*>(obj))
-		entry.priority = obj_sprite3D->z_index;
-	else if (auto obj_text = dynamic_cast<Text*>(obj))
-		entry.priority = obj_text->z_index;
+	if (entry.obj == nullptr)
+		return;
 
 	render_queue.push(entry);
 }

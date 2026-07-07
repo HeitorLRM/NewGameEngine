@@ -2,6 +2,9 @@
 #include "Object2D.hpp"
 #include "Camera2D.hpp"
 #include "Game.hpp"
+#include "RenderPass.hpp"
+#include "Sprite2D.hpp"
+#include "Text.hpp"
 #include "Transform2D.hpp"
 
 #include <SDL3/SDL_render.h>
@@ -33,6 +36,16 @@ void Camera2D::update(float dt) {
 		return;
 
 	Game::registerPass(this);
+}
+
+RenderPass::QueueEntry Camera2D::makeEntry(GameObject* obj) {
+	if (auto obj_sprite = dynamic_cast<Sprite2D*>(obj))
+		return {(float)obj_sprite->z_index, obj_sprite};
+
+	if (auto obj_text = dynamic_cast<Text*>(obj))
+		return {(float)obj_text->z_index, obj_text};
+
+	return {0, nullptr};
 }
 
 void Camera2D::mark_global_transform_dirty() {

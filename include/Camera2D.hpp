@@ -2,8 +2,10 @@
 
 #include "CameraFeed.hpp"
 #include "Game.hpp"
+#include "GameObject.hpp"
 #include "Object2D.hpp"
 #include "Ref.hpp"
+#include "RenderPass.hpp"
 #include "Transform2D.hpp"
 
 namespace engine {
@@ -15,6 +17,7 @@ public:
 	void load() override;
 	void unload() override;
 	void update(float) override;
+	virtual RenderPass::QueueEntry makeEntry(GameObject*);
 
 	const Transform2D& getInverseGlobal();
 

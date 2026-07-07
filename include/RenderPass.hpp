@@ -20,7 +20,6 @@ public:
 	Camera3D* active_camera3D = nullptr;
 	Ref<CameraFeed> getFeed();
 
-private:
 	struct QueueEntry {
 		bool operator<(const QueueEntry& other) const {
 			return priority < other.priority;
@@ -30,6 +29,7 @@ private:
 		GameObject* obj;
 	};
 
+private:
 	std::priority_queue<QueueEntry> render_queue;
 };
 

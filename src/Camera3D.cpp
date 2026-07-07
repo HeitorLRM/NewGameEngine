@@ -4,6 +4,7 @@
 #include "Object3D.hpp"
 #include "CameraFeed.hpp"
 #include "Game.hpp"
+#include "Sprite3D.hpp"
 #include "Vec2.hpp"
 #include "Vec3.hpp"
 #include "Vec4.hpp"
@@ -39,6 +40,13 @@ void Camera3D::update(float dt) {
 		return;
 
 	Game::registerPass(this);
+}
+
+RenderPass::QueueEntry Camera3D::makeEntry(GameObject* obj) {
+	if (auto obj_sprite = dynamic_cast<Sprite3D*>(obj))
+		return {(float)obj_sprite->z_index, obj_sprite};
+
+	return {0, nullptr};
 }
 
 void Camera3D::mark_global_transform_dirty() {
