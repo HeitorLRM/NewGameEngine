@@ -12,6 +12,7 @@
 #include "Vec3.hpp"
 
 #include <array>
+#include <cmath>
 
 using namespace engine;
 using std::string;
@@ -113,7 +114,14 @@ void Sprite3D::render() {
 		vertices2D[i].y = (1.0f - vertices3D[i].y) * feed_offset.y;
 	}
 
-	texture->renderQuad(vertices2D, getFrameUVs(current_frame), modulation);
+	Color render_modulation = modulation;
+	const float fog_density = 0.0035f;
+	float factor = std::exp(-z_index * fog_density);
+	render_modulation.r *= factor;
+	render_modulation.g *= factor;
+	render_modulation.b *= factor;
+
+	texture->renderQuad(vertices2D, getFrameUVs(current_frame), render_modulation);
 }
 
 void Sprite3D::setTexture(Ref<Texture> texture) {
