@@ -35,6 +35,8 @@ protected:
 	void unloadTexture();
 
 public:
+	static Vec3 fog_power;
+	static float fog_density;
 	float pixel_size = 1.0/64.0;
 	bool is_billboard = false;
 	Color modulation = {1.0,1.0,1.0,1.0};

@@ -18,6 +18,9 @@ using namespace engine;
 using std::string;
 using std::array;
 
+engine::Vec3 Sprite3D::fog_power = {1.6f, 2.0f, 1.1f};
+float Sprite3D::fog_density = 0.002f;
+
 const std::string& Sprite3D::getResourceType() const {
 	static const std::string RES_NAME = "Sprite3D";
 	return RES_NAME;
@@ -115,11 +118,10 @@ void Sprite3D::render() {
 	}
 
 	Color render_modulation = modulation;
-	const float fog_density = 0.002f;
 	float factor = std::exp(-z_index * fog_density);
-	render_modulation.r *= pow(factor, 1.6);
-	render_modulation.g *= pow(factor, 2.0);
-	render_modulation.b *= pow(factor, 1.1);
+	render_modulation.r *= pow(factor, fog_power.x);
+	render_modulation.g *= pow(factor, fog_power.y);
+	render_modulation.b *= pow(factor, fog_power.z);
 
 	texture->renderQuad(vertices2D, getFrameUVs(current_frame), render_modulation);
 }
