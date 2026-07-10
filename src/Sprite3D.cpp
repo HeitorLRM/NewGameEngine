@@ -115,7 +115,7 @@ void Sprite3D::render() {
 	}
 
 	Color render_modulation = modulation;
-	const float fog_density = 0.003f;
+	const float fog_density = 0.002f;
 	float factor = std::exp(-z_index * fog_density);
 	render_modulation.r *= pow(factor, 1.6);
 	render_modulation.g *= pow(factor, 2.0);
