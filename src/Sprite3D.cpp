@@ -115,11 +115,11 @@ void Sprite3D::render() {
 	}
 
 	Color render_modulation = modulation;
-	const float fog_density = 0.0035f;
+	const float fog_density = 0.003f;
 	float factor = std::exp(-z_index * fog_density);
-	render_modulation.r *= factor;
-	render_modulation.g *= factor;
-	render_modulation.b *= factor;
+	render_modulation.r *= pow(factor, 1.6);
+	render_modulation.g *= pow(factor, 2.0);
+	render_modulation.b *= pow(factor, 1.1);
 
 	texture->renderQuad(vertices2D, getFrameUVs(current_frame), render_modulation);
 }
